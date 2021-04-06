@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  social_auth_buttons: ^2.0.0-nullsafety.1
 
 
   # The following adds the Cupertino Icons font to your application.
