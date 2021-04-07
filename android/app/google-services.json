@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "690968427086",
+    "project_id": "route-40-48d8a",
+    "storage_bucket": "route-40-48d8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690968427086:android:3c47df7985dad2ce00211f",
+        "android_client_info": {
+          "package_name": "com.example.route_40"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690968427086-7oqqabfmvoqeole8fph4l0idoo437r09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkU2-FC6o1aq-oy4Momr-e48bMN5OQBoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690968427086-7oqqabfmvoqeole8fph4l0idoo437r09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
