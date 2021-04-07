@@ -10,6 +10,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  /// Controlador del input email
+  final emailController = TextEditingController();
+
+  /// Controlador del input pass
+  final passwordController = TextEditingController();
+  bool _isAuth = false;
   bool _isLogin = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FacebookLogin _facebookLogin = FacebookLogin();
@@ -70,11 +76,11 @@ class _LoginState extends State<Login> {
                                 ),
                               ]),
                           Spacer(),
-                          email(),
+                          email(emailController),
                           SizedBox(
                             height: 38.0,
                           ),
-                          password(),
+                          password(passwordController),
                           Spacer(),
                           Container(
                             padding: const EdgeInsets.only(left: 180.0),
@@ -87,12 +93,32 @@ class _LoginState extends State<Login> {
                               color: Color.fromRGBO(255, 154, 81, 1),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()),
-                                );
+                              onPressed: () async {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => Login()),
+                                // );
+                                try {
+                                  _auth
+                                      .signInWithEmailAndPassword(
+                                          email: emailController.text,
+                                          password: passwordController.text)
+                                      .then((value) => {
+                                            setState(() {
+                                              _isLogin = true;
+                                              _isAuth = true;
+                                              _user = value.user;
+                                            })
+                                          });
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    print('No user found for that email.');
+                                  } else if (e.code == 'wrong-password') {
+                                    print(
+                                        'Wrong password provided for that user.');
+                                  }
+                                }
                               },
                             ),
                           ),
@@ -101,30 +127,55 @@ class _LoginState extends State<Login> {
               ),
             )
           : Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  CircleAvatar(
-                    radius: 40.0,
-                    backgroundImage: NetworkImage(_url),
-                  ),
-                  Text(
-                    _user.displayName,
-                    style: TextStyle(fontSize: 30.0),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  OutlineButton(
-                    onPressed: () async {
-                      await _signOut();
-                    },
-                    child: Text(
-                      "Logout",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ),
-                ])),
+              child: !_isAuth
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          CircleAvatar(
+                            radius: 40.0,
+                            backgroundImage: NetworkImage(_url),
+                          ),
+                          Text(
+                            _user.displayName,
+                            style: TextStyle(fontSize: 30.0),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          OutlineButton(
+                            onPressed: () async {
+                              await _signOut();
+                            },
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                          ),
+                        ])
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          CircleAvatar(
+                            radius: 40.0,
+                            //backgroundImage: NetworkImage(_url),
+                          ),
+                          Text(
+                            _user.email,
+                            style: TextStyle(fontSize: 30.0),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          OutlineButton(
+                            onPressed: () async {
+                              await _signOut();
+                            },
+                            child: Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                          ),
+                        ])),
     );
   }
 
