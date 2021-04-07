@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
 
@@ -52,7 +53,9 @@ class _LoginState extends State<Login> {
                                 Expanded(
                                   flex: 5,
                                   child: GoogleAuthButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _signInWithGoogle();
+                                    },
                                     darkMode: false,
                                     style: AuthButtonStyle.icon,
                                   ),
@@ -128,6 +131,22 @@ class _LoginState extends State<Login> {
     );
   }
 
+  //Google login
+  Future _signInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  //Facebook login
   Future _handleLogin() async {
     FacebookLoginResult _result = await _facebookLogin.logIn(['email']);
     switch (_result.status) {
