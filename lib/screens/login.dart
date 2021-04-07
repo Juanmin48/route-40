@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   FacebookLogin _facebookLogin = FacebookLogin();
   User _user;
   String _url;
+  String _errorMessage = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +82,13 @@ class _LoginState extends State<Login> {
                             height: 38.0,
                           ),
                           password(passwordController),
+                          Container(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(_errorMessage,
+                                style: new TextStyle(
+                                  color: Color.fromRGBO(255, 154, 81, 1),
+                                )),
+                          ),
                           Spacer(),
                           Container(
                             padding: const EdgeInsets.only(left: 180.0),
@@ -100,7 +108,7 @@ class _LoginState extends State<Login> {
                                 //       builder: (context) => Login()),
                                 // );
                                 try {
-                                  _auth
+                                  await _auth
                                       .signInWithEmailAndPassword(
                                           email: emailController.text,
                                           password: passwordController.text)
@@ -113,10 +121,13 @@ class _LoginState extends State<Login> {
                                           });
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'user-not-found') {
-                                    print('No user found for that email.');
+                                    _errorMessage =
+                                        'Email/contraseña incorrectos';
+                                    setState(() {});
                                   } else if (e.code == 'wrong-password') {
-                                    print(
-                                        'Wrong password provided for that user.');
+                                    _errorMessage =
+                                        'Email/contraseña incorrectos';
+                                    setState(() {});
                                   }
                                 }
                               },
