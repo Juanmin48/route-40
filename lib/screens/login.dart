@@ -143,7 +143,12 @@ class _LoginState extends State<Login> {
       idToken: googleAuth.idToken,
     );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    var a = await _auth.signInWithCredential(credential);
+      setState(() {
+      _isLogin = true;
+      _user = a.user;
+      _url = _user.photoURL;
+    });
   }
 
   //Facebook login
