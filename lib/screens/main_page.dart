@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/screens/login.dart';
+import 'package:route_40/screens/register.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -24,8 +25,7 @@ class _HomepageState extends State<Homepage> {
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Expanded(
               child: Container(
-            padding: const EdgeInsets.only(
-                bottom: 320.0, top: 320.0, left: 20.0, right: 20.0),
+            padding: const EdgeInsets.only(top: 120.0, left: 20.0, right: 20.0),
             child: MaterialButton(
               child: Text("Iniciar sesión",
                   style: new TextStyle(
@@ -36,6 +36,25 @@ class _HomepageState extends State<Homepage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
+                );
+              },
+            ),
+          )),
+          Spacer(),
+          Expanded(
+              child: Container(
+            padding:
+                const EdgeInsets.only(bottom: 120.0, left: 20.0, right: 20.0),
+            child: MaterialButton(
+              child: Text("Registro",
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                  )),
+              color: Color.fromRGBO(255, 154, 81, 1),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Register()),
                 );
               },
             ),

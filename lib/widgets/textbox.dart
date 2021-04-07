@@ -23,31 +23,16 @@ Widget passwordInput() {
   );
 }
 
-Widget email(emailController) {
+Widget textbox(controller, message) {
   return Container(
     decoration: BoxDecoration(
         color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
     child: TextField(
-      controller: emailController,
+      controller: controller,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(10),
           fillColor: Colors.white,
-          hintText: "Correo electrónico:",
-          hintStyle: TextStyle(color: Colors.grey)),
-    ),
-  );
-}
-
-Widget password(passwordController) {
-  return Container(
-    decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
-    child: TextField(
-      controller: passwordController,
-      decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10),
-          fillColor: Colors.white,
-          hintText: "Contraseña:",
+          hintText: message,
           hintStyle: TextStyle(color: Colors.grey)),
     ),
   );

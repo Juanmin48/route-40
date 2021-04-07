@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
+import 'package:route_40/screens/register.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -77,11 +78,11 @@ class _LoginState extends State<Login> {
                                 ),
                               ]),
                           Spacer(),
-                          email(emailController),
+                          textbox(emailController, "Correo electrónico"),
                           SizedBox(
                             height: 38.0,
                           ),
-                          password(passwordController),
+                          textbox(passwordController, "Contraseña"),
                           Container(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(_errorMessage,
@@ -134,6 +135,22 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Spacer(),
+                          Container(
+                            child: FlatButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Register()),
+                                  );
+                                },
+                                child: Text(
+                                  "¿No tienes cuenta? Registrate",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 154, 81, 1),
+                                  ),
+                                )),
+                          )
                         ])),
               ),
             )
