@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -18,7 +19,8 @@ class _RegisterState extends State<Register> {
   final passwordController = TextEditingController();
   // Controlador del input condirmar contraseña
   final conpasswordController = TextEditingController();
-
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String _errorMessage = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +64,13 @@ class _RegisterState extends State<Register> {
                     height: 38.0,
                   ),
                   textbox(conpasswordController, "Confirmar contraseña"),
+                  Container(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(_errorMessage,
+                        style: new TextStyle(
+                          color: Color.fromRGBO(255, 154, 81, 1),
+                        )),
+                  ),
                   Spacer(),
                   Container(
                     padding: const EdgeInsets.only(left: 180.0),
@@ -74,7 +83,34 @@ class _RegisterState extends State<Register> {
                       color: Color.fromRGBO(255, 154, 81, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
-                      onPressed: () {},
+                      onPressed: () async {
+                        try {
+                          if (passwordController.text ==
+                              conpasswordController.text) {
+                            await _auth
+                                .createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text)
+                                .then((value) => {
+                                      print(nameController
+                                          .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()),
+                                      )
+                                    });
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'email-already-in-use') {
+                            _errorMessage = 'Este email ya existe.';
+                            setState(() {});
+                          } else if (e.code == 'weak-password') {
+                            _errorMessage = 'Contraseña muy debil';
+                            setState(() {});
+                          }
+                        }
+                      },
                     ),
                   ),
                   Spacer(),
