@@ -22,6 +22,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // resizeToAvoidBottomInset: false,
         body: Center(
       child: Container(
         // padding: const EdgeInsets.all(16.0),
@@ -34,11 +35,14 @@ class _RegisterState extends State<Register> {
             ),
             padding: const EdgeInsets.all(20.0),
             alignment: Alignment.centerLeft,
-            child: Column(
+            child: ListView(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Spacer(),
+                  //Spacer(),
+                  SizedBox(
+                    height: 38.0,
+                  ),
                   Center(
                     child: Container(
                       child: Text("Registro",
@@ -48,7 +52,10 @@ class _RegisterState extends State<Register> {
                           )),
                     ),
                   ),
-                  Spacer(),
+                  //Spacer(),
+                  SizedBox(
+                    height: 58.0,
+                  ),
                   textbox(nameController, "Nombre"),
                   SizedBox(
                     height: 38.0,
@@ -62,7 +69,10 @@ class _RegisterState extends State<Register> {
                     height: 38.0,
                   ),
                   textbox(conpasswordController, "Confirmar contraseña"),
-                  Spacer(),
+                  //Spacer(),
+                  SizedBox(
+                    height: 38.0,
+                  ),
                   Container(
                     padding: const EdgeInsets.only(left: 180.0),
                     height: 50,
@@ -77,7 +87,10 @@ class _RegisterState extends State<Register> {
                       onPressed: () {},
                     ),
                   ),
-                  Spacer(),
+                  //Spacer(),
+                  SizedBox(
+                    height: 58.0,
+                  ),
                   Container(
                     child: FlatButton(
                         onPressed: () {

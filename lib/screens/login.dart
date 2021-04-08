@@ -26,6 +26,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: !_isLogin
           ? Center(
               child: Container(
@@ -39,11 +40,14 @@ class _LoginState extends State<Login> {
                     ),
                     padding: const EdgeInsets.all(20.0),
                     alignment: Alignment.centerLeft,
-                    child: Column(
+                    child: ListView(
                         // crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        //mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Spacer(),
+                          //Spacer(),
+                          SizedBox(
+                            height: 58.0,
+                          ),
                           Center(
                             child: Container(
                               child: Text("Inicio de sesión",
@@ -53,7 +57,10 @@ class _LoginState extends State<Login> {
                                   )),
                             ),
                           ),
-                          Spacer(),
+                          //Spacer(),
+                          SizedBox(
+                            height: 38.0,
+                          ),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
@@ -77,7 +84,10 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ]),
-                          Spacer(),
+                          //Spacer(),
+                          SizedBox(
+                            height: 58.0,
+                          ),
                           textbox(emailController, "Correo electrónico"),
                           SizedBox(
                             height: 38.0,
@@ -90,7 +100,10 @@ class _LoginState extends State<Login> {
                                   color: Color.fromRGBO(255, 154, 81, 1),
                                 )),
                           ),
-                          Spacer(),
+                          //Spacer(),
+                          SizedBox(
+                            height: 58.0,
+                          ),
                           Container(
                             padding: const EdgeInsets.only(left: 180.0),
                             height: 50,
@@ -134,7 +147,10 @@ class _LoginState extends State<Login> {
                               },
                             ),
                           ),
-                          Spacer(),
+                          //Spacer(),
+                          SizedBox(
+                            height: 58.0,
+                          ),
                           Container(
                             child: FlatButton(
                                 onPressed: () {
