@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
@@ -21,6 +22,7 @@ class _RegisterState extends State<Register> {
   final conpasswordController = TextEditingController();
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _errorMessage = "";
+  CollectionReference _users = FirebaseFirestore.instance.collection('users');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,19 +60,19 @@ class _RegisterState extends State<Register> {
                   SizedBox(
                     height: 58.0,
                   ),
-                  textbox(nameController, "Nombre"),
+                  textbox(nameController, "Nombre", false),
                   SizedBox(
                     height: 38.0,
                   ),
-                  textbox(emailController, "Correo electrónico"),
+                  textbox(emailController, "Correo electrónico", false),
                   SizedBox(
                     height: 38.0,
                   ),
-                  textbox(passwordController, "Contraseña"),
+                  textbox(passwordController, "Contraseña", true),
                   SizedBox(
                     height: 38.0,
                   ),
-                  textbox(conpasswordController, "Confirmar contraseña"),
+                  textbox(conpasswordController, "Confirmar contraseña", true),
                   Container(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(_errorMessage,
@@ -94,32 +96,7 @@ class _RegisterState extends State<Register> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       onPressed: () async {
-                        try {
-                          if (passwordController.text ==
-                              conpasswordController.text) {
-                            await _auth
-                                .createUserWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text)
-                                .then((value) => {
-                                      print(nameController
-                                          .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Login()),
-                                      )
-                                    });
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'email-already-in-use') {
-                            _errorMessage = 'Este email ya existe.';
-                            setState(() {});
-                          } else if (e.code == 'weak-password') {
-                            _errorMessage = 'Contraseña muy debil';
-                            setState(() {});
-                          }
-                        }
+                        await register();
                       },
                     ),
                   ),
@@ -145,5 +122,40 @@ class _RegisterState extends State<Register> {
                 ])),
       ),
     ));
+  }
+
+  Future addUSer(User _user) async {
+    _users
+        .add(
+            {'name': nameController.text, 'email': emailController.text, 'uid': _user.uid})
+        .then((value) => print("Usuario añadido"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  Future register() async {
+    try {
+      if (passwordController.text == conpasswordController.text) {
+        await _auth
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text)
+            .then((value) => {
+                  addUSer(value.user),
+                  print(nameController
+                      .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  )
+                });
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        _errorMessage = 'Este email ya existe.';
+        setState(() {});
+      } else if (e.code == 'weak-password') {
+        _errorMessage = 'Contraseña muy debil';
+        setState(() {});
+      }
+    }
   }
 }

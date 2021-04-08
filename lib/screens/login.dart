@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -14,6 +15,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   /// Controlador del input email
   final emailController = TextEditingController();
+  final googleSignIn = GoogleSignIn();
 
   /// Controlador del input pass
   final passwordController = TextEditingController();
@@ -24,14 +26,13 @@ class _LoginState extends State<Login> {
   User _user;
   String _url;
   String _errorMessage = "";
+  CollectionReference _users = FirebaseFirestore.instance.collection('users');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: !_isLogin
           ? Center(
               child: Container(
-                // padding: const EdgeInsets.all(16.0),
                 padding: const EdgeInsets.only(
                     bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
                 child: Container(
@@ -41,136 +42,122 @@ class _LoginState extends State<Login> {
                     ),
                     padding: const EdgeInsets.all(20.0),
                     alignment: Alignment.centerLeft,
-                    child: ListView(
-                        // crossAxisAlignment: CrossAxisAlignment.stretch,
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          //Spacer(),
-                          SizedBox(
-                            height: 58.0,
-                          ),
-                          Center(
-                            child: Container(
-                              child: Text("Inicio de sesión",
-                                  style: new TextStyle(
-                                    fontSize: 35.0,
-                                    color: Color.fromRGBO(255, 154, 81, 1),
-                                  )),
-                            ),
-                          ),
-                          //Spacer(),
-                          SizedBox(
-                            height: 38.0,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 5,
-                                  child: GoogleAuthButton(
-                                    onPressed: () {
-                                      _signInWithGoogle();
-                                    },
-                                    darkMode: false,
-                                    style: AuthButtonStyle.icon,
-                                  ),
-                                ),
-                                Spacer(),
-                                Expanded(
-                                  flex: 5,
-                                  child: FacebookAuthButton(
-                                    onPressed: () async {
-                                      await _handleLogin();
-                                    },
-                                    darkMode: false,
-                                    style: AuthButtonStyle.icon,
-                                  ),
-                                ),
-                              ]),
-                          //Spacer(),
-                          SizedBox(
-                            height: 58.0,
-                          ),
-                          textbox(emailController, "Correo electrónico"),
-                          SizedBox(
-                            height: 38.0,
-                          ),
-                          textbox(passwordController, "Contraseña"),
-                          Container(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(_errorMessage,
-                                style: new TextStyle(
-                                  color: Color.fromRGBO(255, 154, 81, 1),
-                                )),
-                          ),
-                          //Spacer(),
-                          SizedBox(
-                            height: 58.0,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 180.0),
-                            height: 50,
-                            child: MaterialButton(
-                              child: Text("Ingresar",
-                                  style: new TextStyle(
-                                    fontSize: 20.0,
-                                  )),
-                              color: Color.fromRGBO(255, 154, 81, 1),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              onPressed: () async {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => Login()),
-                                // );
-                                try {
-                                  await _auth
-                                      .signInWithEmailAndPassword(
-                                          email: emailController.text,
-                                          password: passwordController.text)
-                                      .then((value) => {
-                                            setState(() {
-                                              _isLogin = true;
-                                              _isAuth = true;
-                                              _user = value.user;
-                                            })
-                                          });
-                                } on FirebaseAuthException catch (e) {
-                                  if (e.code == 'user-not-found') {
-                                    _errorMessage =
-                                        'Email/contraseña incorrectos';
-                                    setState(() {});
-                                  } else if (e.code == 'wrong-password') {
-                                    _errorMessage =
-                                        'Email/contraseña incorrectos';
-                                    setState(() {});
-                                  }
-                                }
-                              },
-                            ),
-                          ),
-                          //Spacer(),
-                          SizedBox(
-                            height: 58.0,
-                          ),
-                          Container(
-                            child: FlatButton(
+                    child: ListView(children: [
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      Center(
+                        child: Container(
+                          child: Text("Inicio de sesión",
+                              style: new TextStyle(
+                                fontSize: 35.0,
+                                color: Color.fromRGBO(255, 154, 81, 1),
+                              )),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 5,
+                              child: GoogleAuthButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Register()),
-                                  );
+                                  _signInWithGoogle();
                                 },
-                                child: Text(
-                                  "¿No tienes cuenta? Registrate",
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(255, 154, 81, 1),
-                                  ),
-                                )),
-                          )
-                        ])),
+                                darkMode: false,
+                                style: AuthButtonStyle.icon,
+                              ),
+                            ),
+                            Spacer(),
+                            Expanded(
+                              flex: 5,
+                              child: FacebookAuthButton(
+                                onPressed: () async {
+                                  await _handleLogin();
+                                },
+                                darkMode: false,
+                                style: AuthButtonStyle.icon,
+                              ),
+                            ),
+                          ]),
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      textbox(emailController, "Correo electrónico", false),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      textbox(passwordController, "Contraseña", true),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(_errorMessage,
+                            style: new TextStyle(
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 180.0),
+                        height: 50,
+                        child: MaterialButton(
+                          child: Text("Ingresar",
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                              )),
+                          color: Color.fromRGBO(255, 154, 81, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          onPressed: () async {
+                            try {
+                              await _auth
+                                  .signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text)
+                                  .then((value) => {
+                                        setState(() {
+                                          _isLogin = true;
+                                          _isAuth = true;
+                                          _user = value.user;
+                                        })
+                                      });
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                _errorMessage = 'Email/contraseña incorrectos';
+                                setState(() {});
+                              } else if (e.code == 'wrong-password') {
+                                _errorMessage = 'Email/contraseña incorrectos';
+                                setState(() {});
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                      //Spacer(),
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      Container(
+                        child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Register()),
+                              );
+                            },
+                            child: Text(
+                              "¿No tienes cuenta? Registrate",
+                              style: TextStyle(
+                                color: Color.fromRGBO(255, 154, 81, 1),
+                              ),
+                            )),
+                      )
+                    ])),
               ),
             )
           : Center(
@@ -202,12 +189,8 @@ class _LoginState extends State<Login> {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                          CircleAvatar(
-                            radius: 40.0,
-                            //backgroundImage: NetworkImage(_url),
-                          ),
                           Text(
-                            _user.email,
+                            _user.displayName,
                             style: TextStyle(fontSize: 30.0),
                           ),
                           SizedBox(
@@ -226,6 +209,38 @@ class _LoginState extends State<Login> {
     );
   }
 
+  void _signOutGoogle() async {
+    // sign out from google
+
+    try {
+      await googleSignIn.disconnect();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future addUSer() async {
+    _users
+        .where('uid', isEqualTo: _user.uid)
+        .get()
+        .then((QuerySnapshot snapshot) => {
+              if (snapshot.docs.length == 0)
+                {
+                  _users
+                      .add({
+                        'name': _user.displayName,
+                        'email': _user.email,
+                        'uid': _user.uid
+                      })
+                      .then((value) => print("Usuario añadido"))
+                      .catchError(
+                          (error) => print("Failed to add user: $error"))
+                }
+              else
+                {print('Usuario ya registrado')}
+            });
+  }
+
   //Google login
   Future _signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -239,11 +254,12 @@ class _LoginState extends State<Login> {
     );
 
     var a = await _auth.signInWithCredential(credential);
-      setState(() {
+    setState(() {
       _isLogin = true;
       _user = a.user;
       _url = _user.photoURL;
     });
+    addUSer();
   }
 
   //Facebook login
@@ -274,11 +290,13 @@ class _LoginState extends State<Login> {
       _user = a.user;
       _url = _user.photoURL + '?access_token=' + _token.token;
     });
+    addUSer();
   }
 
   Future _signOut() async {
     await _auth.signOut().then((value) => {
           setState(() {
+            _signOutGoogle();
             _facebookLogin.logOut();
             _isLogin = false;
           })
