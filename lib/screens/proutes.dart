@@ -38,12 +38,15 @@ class _PRoutesState extends State<PRoutes> {
                     ),
                   ),
                   SizedBox(
-                    height: 25.0,
+                    height: 15.0,
                   ),
                   Expanded(
                     child: ListView(children: [
                       //Ejemplo de ruta (reemplazar parametros)
-                      route("Ruta N°1", "Carrera 38", "Sobusa", "30"),
+                      route(context, "Ruta N°1", "Carrera 38", "Sobusa",
+                          "origen", "destino", "30"),
+                      route(context, "Ruta N°2", "Calle 72", "Sodis", "origen",
+                          "destino", "20")
                     ]),
                   ),
                   Center(
