@@ -13,7 +13,6 @@ class PRoutes extends StatefulWidget {
 
 class _PRoutesState extends State<PRoutes> {
   List _routes;
-  List<Widget> routesC = new List<Widget>();
 
   @override
   void initState() {
@@ -21,10 +20,6 @@ class _PRoutesState extends State<PRoutes> {
       _routes = widget.routes;
     });
     print(_routes);
-    for (var i = 0; i < _routes.length; i++) {
-      routesC.add(route(context, "Ruta N°" + i.toString(), _routes[i]['nameR'],
-          _routes[i]['nameE'], "origen", "destino", "20"));
-    }
     super.initState();
   }
 
@@ -69,8 +64,8 @@ class _PRoutesState extends State<PRoutes> {
                                 "Ruta N°" + (index+1).toString(),
                                 _routes[index]['nameR'],
                                 _routes[index]['nameE'],
-                                "origen",
-                                "destino",
+                                "Origen: ${_routes[index]['pointInit']}",
+                                "Destino: ${_routes[index]['pointFinal']}",
                                 _routes[index]['time']))
                         ),
                   ),
