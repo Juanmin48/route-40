@@ -60,7 +60,7 @@ Widget route(context, index, name, company, origin, destination, time) {
           onTap: () {
             send(context, index, name, company, origin, destination, time);
           },
-          child: Text("Tiempo de llegada: " + time + " minutos",
+          child: Text("Tiempo de llegada: " + time,
               style: new TextStyle(color: Colors.white, fontSize: 19.0)),
         ),
         Divider(

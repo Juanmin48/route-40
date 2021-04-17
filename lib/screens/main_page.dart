@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:route_40/screens/proutes.dart';
 import 'package:route_40/screens/register.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class _HomepageState extends State<Homepage> {
 
   final originController = TextEditingController();
   final destinationController = TextEditingController();
+  List _routes = [];
   // _onPress() {
   //    setState(() {
 
@@ -35,10 +39,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void buscar() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => PRoutes()),
-    );
+    getRoute();
   }
 
   @override
@@ -129,5 +130,29 @@ class _HomepageState extends State<Homepage> {
                 ])),
           )
         ]));
+  }
+
+  Future<http.Response> getRoute() async {
+    if (originController.text != "" && destinationController.text != "") {
+      String param = 'api/find/' +
+          originController.text +
+          ';' +
+          destinationController.text;
+      var response =
+          await http.get(Uri.https('route40-server.herokuapp.com', param));
+      if (response.statusCode == 200) {
+        setState(() {
+          _routes = jsonDecode(response.body);
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PRoutes(_routes)),
+        );
+      }
+      // print(_routes);
+      return response;
+    } else {
+      return null;
+    }
   }
 }

@@ -43,7 +43,7 @@ Widget rdetails(index, name, company, origin, destination, time) {
         SizedBox(
           height: 15.0,
         ),
-        Text("Tiempo de llegada: " + time + " minutos",
+        Text("Tiempo de llegada: " + time,
             style: new TextStyle(color: Colors.white, fontSize: 19.0)),
       ],
     ),
