@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/widgets/rdetails.dart';
 
-class Data {
-  final String name, company, origin, destination, time;
-  Data(this.name, this.company, this.origin, this.destination, this.time);
-}
-
-class RDetails extends StatelessWidget {
+class RDetails extends StatefulWidget {
   final String index, name, company, origin, destination, time;
   const RDetails(
       {Key key,
@@ -17,12 +12,11 @@ class RDetails extends StatelessWidget {
       @required this.destination,
       @required this.time})
       : super(key: key);
+  @override
+  _RDetailsState createState() => _RDetailsState();
+}
 
-  // @override
-  // _RDetailsState createState() => _RDetailsState();
-
-// class _RDetailsState extends State<RDetails> {
-
+class _RDetailsState extends State<RDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +42,8 @@ class RDetails extends StatelessWidget {
                       SizedBox(
                         height: 15.0,
                       ),
-                      rdetails(index, name, company, origin, destination, time),
+                      rdetails(widget.index, widget.name, widget.company,
+                          widget.origin, widget.destination, widget.time),
                       SizedBox(
                         height: 15.0,
                       ),
@@ -60,5 +55,4 @@ class RDetails extends StatelessWidget {
       ),
     );
   }
-// }
 }
