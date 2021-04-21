@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/register.dart';
+import 'package:route_40/screens/fav_routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Login extends StatefulWidget {
@@ -25,6 +26,7 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
   //Controlador del mapa
   GoogleMapController mapController;
+  final LatLng _center = const LatLng(11.018843, -74.850514);
   // final LatLng _center = widget.coords;
   bool _isAuth = false;
   bool _isLogin = false;
@@ -48,7 +50,7 @@ class _LoginState extends State<Login> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: widget.iposition,
-              zoom: 18.0,
+              zoom: 13.0,
             ),
           ),
           !_isLogin
@@ -186,50 +188,141 @@ class _LoginState extends State<Login> {
                 )
               : Center(
                   child: !_isAuth
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                              CircleAvatar(
-                                radius: 40.0,
-                                backgroundImage: NetworkImage(_url),
-                              ),
-                              Text(
-                                _user.displayName,
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              OutlineButton(
-                                onPressed: () async {
-                                  await _signOut();
-                                },
-                                child: Text(
-                                  "Logout",
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ),
-                            ])
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                              Text(
-                                _user.displayName,
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              OutlineButton(
-                                onPressed: () async {
-                                  await _signOut();
-                                },
-                                child: Text(
-                                  "Logout",
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ),
-                            ])),
+                      ? Container(
+                          padding: const EdgeInsets.only(
+                              bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Color.fromRGBO(38, 28, 20, 0.8),
+                            ),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40.0,
+                                    backgroundImage: NetworkImage(_url),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    _user.displayName,
+                                    style: TextStyle(
+                                        fontSize: 30.0, color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 90.0, right: 90.0),
+                                        height: 50,
+                                        child: MaterialButton(
+                                          child: Text("Rutas favoritas",
+                                              style: new TextStyle(
+                                                fontSize: 20.0,
+                                              )),
+                                          color:
+                                              Color.fromRGBO(255, 154, 81, 1),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => FRoutes(
+                                                        iposition:
+                                                            widget.iposition,
+                                                      )),
+                                            );
+                                          },
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () async {
+                                      await _signOut();
+                                    },
+                                    child: Text(
+                                      "Logout",
+                                      style: TextStyle(fontSize: 20.0),
+                                    ),
+                                    color: Color.fromRGBO(255, 154, 81, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                  ),
+                                ]),
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.only(
+                              bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Color.fromRGBO(38, 28, 20, 0.8),
+                            ),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(_user.email,
+                                      style: TextStyle(
+                                          fontSize: 30.0, color: Colors.white)),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 90.0, right: 90.0),
+                                        height: 50,
+                                        child: MaterialButton(
+                                          child: Text("Rutas favoritas",
+                                              style: new TextStyle(
+                                                fontSize: 20.0,
+                                              )),
+                                          color:
+                                              Color.fromRGBO(255, 154, 81, 1),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => FRoutes(
+                                                        iposition:
+                                                            widget.iposition,
+                                                      )),
+                                            );
+                                          },
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () async {
+                                      await _signOut();
+                                    },
+                                    child: Text(
+                                      "Logout",
+                                      style: TextStyle(fontSize: 20.0),
+                                    ),
+                                    color: Color.fromRGBO(255, 154, 81, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                  ),
+                                ]),
+                          ),
+                        )),
         ],
       ),
     );

@@ -35,7 +35,7 @@ class _RDetailsState extends State<RDetails> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
-              zoom: 18.0,
+              zoom: 13.0,
             ),
           ),
           Center(

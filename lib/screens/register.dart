@@ -43,7 +43,7 @@ class _RegisterState extends State<Register> {
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: widget.iposition,
-            zoom: 18.0,
+            zoom: 13.0,
           ),
         ),
         Center(

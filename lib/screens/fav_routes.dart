@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:route_40/screens/main_page.dart';
+import 'package:route_40/screens/login.dart';
 import 'package:route_40/widgets/route.dart';
 
-class PRoutes extends StatefulWidget {
-  final List routes;
+class FRoutes extends StatefulWidget {
   final LatLng iposition;
 
-  const PRoutes({Key key, @required this.routes, @required this.iposition})
-      : super(key: key);
+  const FRoutes({Key key, @required this.iposition}) : super(key: key);
 
   @override
-  _PRoutesState createState() => _PRoutesState();
+  _FRoutesState createState() => _FRoutesState();
 }
 
-class _PRoutesState extends State<PRoutes> {
+class _FRoutesState extends State<FRoutes> {
   List _routes;
   //Controlador del mapa
   GoogleMapController mapController;
@@ -25,9 +23,7 @@ class _PRoutesState extends State<PRoutes> {
 
   @override
   void initState() {
-    setState(() {
-      _routes = widget.routes;
-    });
+    setState(() {});
     print(_routes);
     super.initState();
   }
@@ -63,7 +59,7 @@ class _PRoutesState extends State<PRoutes> {
                       ),
                       Center(
                         child: Container(
-                          child: Text("Posibles rutas",
+                          child: Text("Rutas favoritas",
                               style: new TextStyle(
                                 fontSize: 35.0,
                                 color: Color.fromRGBO(255, 154, 81, 1),
@@ -74,17 +70,12 @@ class _PRoutesState extends State<PRoutes> {
                         height: 15.0,
                       ),
                       Expanded(
-                        child: ListView(
-                            children: List.generate(
-                                _routes.length,
-                                (index) => route(
-                                    context,
-                                    "Ruta N°" + (index + 1).toString(),
-                                    _routes[index]['nameR'],
-                                    _routes[index]['nameE'],
-                                    "Origen: ${_routes[index]['pointInit']}",
-                                    "Destino: ${_routes[index]['pointFinal']}",
-                                    _routes[index]['time']))),
+                        child: ListView(children: [
+                          route(context, "index", "name", "company", "origin",
+                              "destination", "time"),
+                          route(context, "index2", "name", "company", "origin",
+                              "destination", "time")
+                        ]),
                       ),
                       Center(
                         child: Container(
@@ -103,7 +94,9 @@ class _PRoutesState extends State<PRoutes> {
                                 Navigator.pop(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Homepage()),
+                                      builder: (context) => Login(
+                                            iposition: widget.iposition,
+                                          )),
                                 );
                               },
                             )),

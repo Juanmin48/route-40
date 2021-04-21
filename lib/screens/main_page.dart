@@ -17,8 +17,9 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   //Poner aqui las variables de estado y metodos
   GoogleMapController mapController;
-  LatLng _position;
-  final LatLng _center = const LatLng(11.018843, -74.850514);
+
+  final LatLng _center = const LatLng(10.976778, -74.806306);
+  LatLng _position = LatLng(10.976778, -74.806306);
   bool visibilitybuttons = true;
 
   final originController = TextEditingController();
@@ -57,7 +58,7 @@ class _HomepageState extends State<Homepage> {
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: _center,
-            zoom: 18.0,
+            zoom: 13.0,
           ),
           onCameraMove: (CameraPosition position) {
             _position = position.target;
