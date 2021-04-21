@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   social_auth_buttons: ^2.0.0-nullsafety.1
   keyboard_visibility: ^0.5.6
+  google_maps_flutter: ^2.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   meta: ^1.1.6

@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
+  final LatLng iposition;
+
+  const Register({Key key, @required this.iposition}) : super(key: key);
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -20,114 +24,138 @@ class _RegisterState extends State<Register> {
   final passwordController = TextEditingController();
   // Controlador del input condirmar contraseña
   final conpasswordController = TextEditingController();
+  GoogleMapController mapController;
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _errorMessage = "";
   CollectionReference _users = FirebaseFirestore.instance.collection('users');
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         // resizeToAvoidBottomInset: false,
-        body: Center(
-      child: Container(
-        // padding: const EdgeInsets.all(16.0),
-        padding: const EdgeInsets.only(
-            bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
-        child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Color.fromRGBO(38, 28, 20, 0.8),
-            ),
-            padding: const EdgeInsets.all(20.0),
-            alignment: Alignment.centerLeft,
-            child: ListView(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Spacer(),
-                  SizedBox(
-                    height: 38.0,
-                  ),
-                  Center(
-                    child: Container(
-                      child: Text("Registro",
-                          style: new TextStyle(
-                            fontSize: 35.0,
-                            color: Color.fromRGBO(255, 154, 81, 1),
-                          )),
-                    ),
-                  ),
-                  //Spacer(),
-                  SizedBox(
-                    height: 58.0,
-                  ),
-                  textbox(nameController, "Nombre", false),
-                  SizedBox(
-                    height: 38.0,
-                  ),
-                  textbox(emailController, "Correo electrónico", false),
-                  SizedBox(
-                    height: 38.0,
-                  ),
-                  textbox(passwordController, "Contraseña", true),
-                  SizedBox(
-                    height: 38.0,
-                  ),
-                  textbox(conpasswordController, "Confirmar contraseña", true),
-                  Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(_errorMessage,
-                        style: new TextStyle(
+        body: Stack(
+      children: [
+        GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: widget.iposition,
+            zoom: 18.0,
+          ),
+        ),
+        Center(
+          child: Container(
+            // padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(
+                bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Color.fromRGBO(38, 28, 20, 0.8),
+                ),
+                padding: const EdgeInsets.all(20.0),
+                alignment: Alignment.centerLeft,
+                child: ListView(
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //Spacer(),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      Center(
+                        child: Container(
+                          child: Text("Registro",
+                              style: new TextStyle(
+                                fontSize: 35.0,
+                                color: Color.fromRGBO(255, 154, 81, 1),
+                              )),
+                        ),
+                      ),
+                      //Spacer(),
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      textbox(nameController, "Nombre", false),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      textbox(emailController, "Correo electrónico", false),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      textbox(passwordController, "Contraseña", true),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      textbox(
+                          conpasswordController, "Confirmar contraseña", true),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(_errorMessage,
+                            style: new TextStyle(
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                            )),
+                      ),
+                      //Spacer(),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 180.0),
+                        height: 50,
+                        child: MaterialButton(
+                          child: Text("Registrar",
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                              )),
                           color: Color.fromRGBO(255, 154, 81, 1),
-                        )),
-                  ),
-                  //Spacer(),
-                  SizedBox(
-                    height: 38.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 180.0),
-                    height: 50,
-                    child: MaterialButton(
-                      child: Text("Registrar",
-                          style: new TextStyle(
-                            fontSize: 20.0,
-                          )),
-                      color: Color.fromRGBO(255, 154, 81, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      onPressed: () async {
-                        await register();
-                      },
-                    ),
-                  ),
-                  //Spacer(),
-                  SizedBox(
-                    height: 58.0,
-                  ),
-                  Container(
-                    child: FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Login()),
-                          );
-                        },
-                        child: Text(
-                          "¿Ya tienes cuenta? Inicia sesión",
-                          style: TextStyle(
-                            color: Color.fromRGBO(255, 154, 81, 1),
-                          ),
-                        )),
-                  )
-                ])),
-      ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          onPressed: () async {
+                            await register();
+                          },
+                        ),
+                      ),
+                      //Spacer(),
+                      SizedBox(
+                        height: 58.0,
+                      ),
+                      Container(
+                        child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login(
+                                          iposition: widget.iposition,
+                                        )),
+                              );
+                            },
+                            child: Text(
+                              "¿Ya tienes cuenta? Inicia sesión",
+                              style: TextStyle(
+                                color: Color.fromRGBO(255, 154, 81, 1),
+                              ),
+                            )),
+                      )
+                    ])),
+          ),
+        ),
+      ],
     ));
   }
 
   Future addUSer(User _user) async {
     _users
-        .add(
-            {'name': nameController.text, 'email': emailController.text, 'uid': _user.uid})
+        .add({
+          'name': nameController.text,
+          'email': emailController.text,
+          'uid': _user.uid
+        })
         .then((value) => print("Usuario añadido"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -144,7 +172,10 @@ class _RegisterState extends State<Register> {
                       .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Login()),
+                    MaterialPageRoute(
+                        builder: (context) => Login(
+                              iposition: widget.iposition,
+                            )),
                   )
                 });
       }
