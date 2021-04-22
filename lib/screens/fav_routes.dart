@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/screens/login.dart';
@@ -5,8 +6,9 @@ import 'package:route_40/widgets/route.dart';
 
 class FRoutes extends StatefulWidget {
   final LatLng iposition;
-
-  const FRoutes({Key key, @required this.iposition}) : super(key: key);
+  final User user;
+  const FRoutes({Key key, @required this.iposition, this.user})
+      : super(key: key);
 
   @override
   _FRoutesState createState() => _FRoutesState();
@@ -72,9 +74,9 @@ class _FRoutesState extends State<FRoutes> {
                       Expanded(
                         child: ListView(children: [
                           route(context, "index", "name", "company", "origin",
-                              "destination", "time", {} ),
+                              "destination", "time", {}, widget.user),
                           route(context, "index2", "name", "company", "origin",
-                              "destination", "time", {} )
+                              "destination", "time", {}, widget.user)
                         ]),
                       ),
                       Center(

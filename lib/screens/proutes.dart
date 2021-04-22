@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/screens/main_page.dart';
@@ -6,8 +7,9 @@ import 'package:route_40/widgets/route.dart';
 class PRoutes extends StatefulWidget {
   final List routes;
   final LatLng iposition;
-
-  const PRoutes({Key key, @required this.routes, @required this.iposition})
+  final User user;
+  const PRoutes(
+      {Key key, @required this.routes, @required this.iposition, this.user})
       : super(key: key);
 
   @override
@@ -86,7 +88,8 @@ class _PRoutesState extends State<PRoutes> {
                                     "Origen: ${_routes[index]['pointInit']}",
                                     "Destino: ${_routes[index]['pointFinal']}",
                                     _routes[index]['time'],
-                                    _routes[index]))),
+                                    _routes[index],
+                                    widget.user))),
                       ),
                       Center(
                         child: Container(

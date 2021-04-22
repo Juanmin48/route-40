@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:route_40/screens/main_page.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/register.dart';
@@ -257,6 +258,28 @@ class _LoginState extends State<Login> {
                                         borderRadius:
                                             BorderRadius.circular(10.0)),
                                   ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  user: _user,
+                                                )),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Atrás",
+                                      style: TextStyle(fontSize: 20.0),
+                                    ),
+                                    color: Color.fromRGBO(255, 154, 81, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                  ),
                                 ]),
                           ),
                         )
@@ -313,6 +336,28 @@ class _LoginState extends State<Login> {
                                     },
                                     child: Text(
                                       "Logout",
+                                      style: TextStyle(fontSize: 20.0),
+                                    ),
+                                    color: Color.fromRGBO(255, 154, 81, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  user: _user,
+                                                )),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Atrás",
                                       style: TextStyle(fontSize: 20.0),
                                     ),
                                     color: Color.fromRGBO(255, 154, 81, 1),

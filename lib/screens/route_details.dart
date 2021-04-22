@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/widgets/rdetails.dart';
@@ -5,7 +6,9 @@ import 'package:route_40/widgets/rdetails.dart';
 class RDetails extends StatefulWidget {
   final String index;
   final dynamic route;
-  const RDetails({Key key, @required this.index, @required this.route})
+  final User user;
+  const RDetails(
+      {Key key, @required this.index, @required this.route, this.user})
       : super(key: key);
   @override
   _RDetailsState createState() => _RDetailsState();
@@ -30,7 +33,11 @@ class _RDetailsState extends State<RDetails> {
       LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
           double.parse(widget.route['origin']['x']));
       _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
-      _markers.add(Marker(markerId: MarkerId('pointInit'), position: origin, icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+      _markers.add(Marker(
+          markerId: MarkerId('pointInit'),
+          position: origin,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
     });
     createPolyline();
   }

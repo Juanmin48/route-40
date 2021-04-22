@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:route_40/screens/proutes.dart';
@@ -10,6 +11,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
+  final User user;
+
+  const Homepage({Key key, this.user}) : super(key: key);
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -180,6 +184,7 @@ class _HomepageState extends State<Homepage> {
               builder: (context) => PRoutes(
                     routes: _routes,
                     iposition: _position,
+                    user: widget.user,
                   )),
         );
       }
