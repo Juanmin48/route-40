@@ -28,7 +28,8 @@ class _PRoutesState extends State<PRoutes> {
     setState(() {
       _routes = widget.routes;
     });
-    print(_routes);
+    print(_routes[0]);
+    print(_routes[0].runtimeType);
     super.initState();
   }
 
@@ -84,7 +85,8 @@ class _PRoutesState extends State<PRoutes> {
                                     _routes[index]['nameE'],
                                     "Origen: ${_routes[index]['pointInit']}",
                                     "Destino: ${_routes[index]['pointFinal']}",
-                                    _routes[index]['time']))),
+                                    _routes[index]['time'],
+                                    _routes[index]))),
                       ),
                       Center(
                         child: Container(

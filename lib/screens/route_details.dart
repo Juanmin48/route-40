@@ -3,15 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/widgets/rdetails.dart';
 
 class RDetails extends StatefulWidget {
-  final String index, name, company, origin, destination, time;
-  const RDetails(
-      {Key key,
-      @required this.index,
-      @required this.name,
-      @required this.company,
-      @required this.origin,
-      @required this.destination,
-      @required this.time})
+  final String index;
+  final dynamic route;
+  const RDetails({Key key, @required this.index, @required this.route})
       : super(key: key);
   @override
   _RDetailsState createState() => _RDetailsState();
@@ -19,11 +13,42 @@ class RDetails extends StatefulWidget {
 
 class _RDetailsState extends State<RDetails> {
   GoogleMapController mapController;
-  final LatLng _center = const LatLng(
-      11.018843, -74.850514); //Reemplazar aqui la posición de origen
+  LatLng _center; //Reemplazar aqui la posición de origen
+  List<Polyline> myPolyline = [];
+  final Set<Marker> _markers = Set();
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _center = LatLng(widget.route['pointInit']['_latitude'],
+          widget.route['pointInit']['_longitude']);
+      LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
+          double.parse(widget.route['origin']['x']));
+      _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
+      _markers.add(Marker(markerId: MarkerId('pointInit'), position: origin, icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+    });
+    createPolyline();
+  }
+
+  createPolyline() {
+    print(widget.route);
+    List<LatLng> points = [];
+    for (var item in widget.route['route']) {
+      points.add(LatLng(item['_latitude'], item['_longitude']));
+    }
+    print(points);
+    myPolyline.add(
+      Polyline(
+          polylineId: PolylineId('1'),
+          color: Colors.black,
+          width: 3,
+          points: points),
+    );
   }
 
   @override
@@ -35,8 +60,10 @@ class _RDetailsState extends State<RDetails> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
-              zoom: 13.0,
+              zoom: 17.0,
             ),
+            polylines: myPolyline.toSet(),
+            markers: _markers,
           ),
           Center(
             child: Container(
@@ -60,8 +87,13 @@ class _RDetailsState extends State<RDetails> {
                           SizedBox(
                             height: 15.0,
                           ),
-                          rdetails(widget.index, widget.name, widget.company,
-                              widget.origin, widget.destination, widget.time),
+                          rdetails(
+                              widget.index,
+                              widget.route['nameR'],
+                              widget.route['nameE'],
+                              'Origen: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
+                              'Destino: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
+                              widget.route['time']),
                           SizedBox(
                             height: 15.0,
                           ),

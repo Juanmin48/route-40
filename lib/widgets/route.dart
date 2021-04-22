@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/screens/route_details.dart';
 
-void send(context, index, name, company, origin, destination, time) {
+void send(context, index, route) {
   Navigator.push(
     context,
     MaterialPageRoute(
         builder: (context) => RDetails(
             index: index,
-            name: name,
-            company: company,
-            origin: origin,
-            destination: destination,
-            time: time)),
+            route: route,)),
   );
 }
 
-Widget route(context, index, name, company, origin, destination, time) {
+Widget route(context, index, name, company, origin, destination, time, route) {
   return MaterialButton(
     onPressed: () =>
-        send(context, index, name, company, origin, destination, time),
+        send(context, index, route),
     child: Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
