@@ -11,15 +11,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
-  final User user;
-
-  const Homepage({Key key, this.user}) : super(key: key);
   @override
   _HomepageState createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
   //Poner aqui las variables de estado y metodos
+  User _user;
   GoogleMapController mapController;
 
   final LatLng _center = const LatLng(10.976778, -74.806306);
@@ -93,7 +91,13 @@ class _HomepageState extends State<Homepage> {
                                       builder: (context) => Login(
                                             iposition: _position,
                                           )),
-                                );
+                                ).then((result) {
+                                  if (result != null) {
+                                    setState(() {
+                                      _user = result;
+                                    });
+                                  }
+                                });
                               },
                             ),
                           ))
@@ -184,7 +188,7 @@ class _HomepageState extends State<Homepage> {
               builder: (context) => PRoutes(
                     routes: _routes,
                     iposition: _position,
-                    user: widget.user,
+                    user: _user,
                   )),
         );
       }

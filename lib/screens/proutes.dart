@@ -105,11 +105,7 @@ class _PRoutesState extends State<PRoutes> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
                               onPressed: () {
-                                Navigator.pop(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage()),
-                                );
+                                Navigator.of(context).pop();
                               },
                             )),
                       )

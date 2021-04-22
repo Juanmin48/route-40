@@ -79,7 +79,7 @@ class _RDetailsState extends State<RDetails> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 460.0,
+                    height: 400.0,
                   ),
                   Container(
                       decoration: BoxDecoration(
@@ -100,7 +100,9 @@ class _RDetailsState extends State<RDetails> {
                               widget.route['nameE'],
                               'Origen: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
                               'Destino: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
-                              widget.route['time']),
+                              widget.route['time'],
+                              widget.user,
+                              false), //El ultimo booleano es para saber si es favorita o no la ruta.
                           SizedBox(
                             height: 15.0,
                           ),

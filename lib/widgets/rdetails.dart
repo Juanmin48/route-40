@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
 
-Widget rdetails(index, name, company, origin, destination, time) {
+void funcion(user, fav) {
+  //Agregar aqui codigo para agregar o eliminar ruta de los favoritos de @user dependiendo del booleano @fav
+}
+Widget rdetails(index, name, company, origin, destination, time, user, fav) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(
-          child: Text(index,
-              style: new TextStyle(
-                  color: Color.fromRGBO(255, 154, 81, 1),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0)),
+        Row(
+          children: [
+            Expanded(
+              flex: 8,
+              child: Center(
+                child: Text(index,
+                    style: new TextStyle(
+                        color: Color.fromRGBO(255, 154, 81, 1),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0)),
+              ),
+            ),
+            if (user != null)
+              Expanded(
+                  flex: 1,
+                  child: MaterialButton(
+                      onPressed: () => funcion(user, fav),
+                      child: !fav
+                          ? Icon(
+                              Icons.star_border,
+                              size: 30,
+                              color: Colors.white,
+                            )
+                          : Icon(
+                              Icons.star,
+                              size: 30,
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                            )))
+          ],
         ),
         SizedBox(
           height: 15.0,

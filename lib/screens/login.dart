@@ -263,13 +263,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   MaterialButton(
                                     onPressed: () {
-                                      Navigator.pop(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Homepage(
-                                                  user: _user,
-                                                )),
-                                      );
+                                      Navigator.of(context).pop(_user);
                                     },
                                     child: Text(
                                       "Atrás",
@@ -348,13 +342,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   MaterialButton(
                                     onPressed: () {
-                                      Navigator.pop(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Homepage(
-                                                  user: _user,
-                                                )),
-                                      );
+                                      Navigator.of(context).pop(_user);
                                     },
                                     child: Text(
                                       "Atrás",
