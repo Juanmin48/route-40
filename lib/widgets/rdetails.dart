@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:route_40/widgets/favbutton.dart';
 
 void funcion(user, fav) {
   //Agregar aqui codigo para agregar o eliminar ruta de los favoritos de @user dependiendo del booleano @fav
@@ -23,19 +24,10 @@ Widget rdetails(index, name, company, origin, destination, time, user, fav) {
             if (user != null)
               Expanded(
                   flex: 1,
-                  child: MaterialButton(
-                      onPressed: () => funcion(user, fav),
-                      child: !fav
-                          ? Icon(
-                              Icons.star_border,
-                              size: 30,
-                              color: Colors.white,
-                            )
-                          : Icon(
-                              Icons.star,
-                              size: 30,
-                              color: Color.fromRGBO(255, 154, 81, 1),
-                            )))
+                  child: Favorite(
+                    fav: fav,
+                    user: user,
+                  ))
           ],
         ),
         SizedBox(
