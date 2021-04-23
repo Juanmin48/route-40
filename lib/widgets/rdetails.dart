@@ -4,7 +4,8 @@ import 'package:route_40/widgets/favbutton.dart';
 void funcion(user, fav) {
   //Agregar aqui codigo para agregar o eliminar ruta de los favoritos de @user dependiendo del booleano @fav
 }
-Widget rdetails(index, name, company, origin, destination, time, user, fav) {
+Widget rdetails(
+    index, name, company, origin, destination, time, route, user, fav) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

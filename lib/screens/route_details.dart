@@ -101,6 +101,7 @@ class _RDetailsState extends State<RDetails> {
                               'Origen: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
                               'Destino: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
                               widget.route['time'],
+                              widget.route,
                               widget.user,
                               false), //El ultimo booleano es para saber si es favorita o no la ruta.
                           SizedBox(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Favorite extends StatefulWidget {
   final bool fav;
@@ -27,6 +28,10 @@ class _FavoriteState extends State<Favorite> {
         _isFavorited = false;
       } else {
         _isFavorited = true;
+        var data;
+        FirebaseFirestore.instance.doc("users/${widget.user.uid}").update({
+          //Write just value which you need to update, like a:
+        });
       }
     });
   }

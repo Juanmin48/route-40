@@ -22,12 +22,13 @@ class _LoginState extends State<Login> {
   /// Controlador del input email
   final emailController = TextEditingController();
   final googleSignIn = GoogleSignIn();
+  final firestoreInstance = FirebaseFirestore.instance;
+  dynamic _resultquery = [];
 
   /// Controlador del input pass
   final passwordController = TextEditingController();
   //Controlador del mapa
   GoogleMapController mapController;
-  final LatLng _center = const LatLng(11.018843, -74.850514);
   // final LatLng _center = widget.coords;
   bool _isAuth = false;
   bool _isLogin = false;
@@ -231,12 +232,15 @@ class _LoginState extends State<Login> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0)),
                                           onPressed: () {
+                                            getdata();
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => FRoutes(
                                                         iposition:
                                                             widget.iposition,
+                                                        user: _user,
+                                                        result: _resultquery,
                                                       )),
                                             );
                                           },
@@ -309,13 +313,16 @@ class _LoginState extends State<Login> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10.0)),
-                                          onPressed: () {
-                                            Navigator.push(
+                                          onPressed: () async {
+                                            getdata();
+                                            await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => FRoutes(
                                                         iposition:
                                                             widget.iposition,
+                                                        user: _user,
+                                                        result: _resultquery,
                                                       )),
                                             );
                                           },
@@ -359,6 +366,21 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
+  }
+
+  void getdata() {
+    firestoreInstance
+        .collection("users")
+        .where("uid", isEqualTo: _user.uid)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        // print(result.data()["fav"]);
+        setState(() {
+          _resultquery = result.data()["fav"];
+        });
+      });
+    });
   }
 
   void _signOutGoogle() async {

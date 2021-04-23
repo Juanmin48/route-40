@@ -6,8 +6,9 @@ import 'package:route_40/widgets/route.dart';
 
 class FRoutes extends StatefulWidget {
   final LatLng iposition;
+  final dynamic result;
   final User user;
-  const FRoutes({Key key, @required this.iposition, this.user})
+  const FRoutes({Key key, @required this.iposition, this.user, this.result})
       : super(key: key);
 
   @override
@@ -15,7 +16,7 @@ class FRoutes extends StatefulWidget {
 }
 
 class _FRoutesState extends State<FRoutes> {
-  List _routes;
+  List<dynamic> _routes;
   //Controlador del mapa
   GoogleMapController mapController;
 
@@ -25,8 +26,9 @@ class _FRoutesState extends State<FRoutes> {
 
   @override
   void initState() {
-    setState(() {});
-    print(_routes);
+    setState(() {
+      _routes = widget.result;
+    });
     super.initState();
   }
 
@@ -71,14 +73,23 @@ class _FRoutesState extends State<FRoutes> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      Expanded(
-                        child: ListView(children: [
-                          route(context, "index", "name", "company", "origin",
-                              "destination", "time", {}, widget.user),
-                          route(context, "index2", "name", "company", "origin",
-                              "destination", "time", {}, widget.user)
-                        ]),
-                      ),
+                      if (widget.result != null)
+                        Expanded(
+                            child: ListView(
+                                children: List.generate(
+                                    _routes.length,
+                                    (index) => route(
+                                        context,
+                                        "Ruta N°" + (index + 1).toString(),
+                                        _routes[index]['compañia'],
+                                        _routes[index]['ruta'],
+                                        "Origen: ${_routes[index]['pointInit']}",
+                                        "Destino: ${_routes[index]['pointFinal']}",
+                                        _routes[index]['tiempo'],
+                                        _routes[index],
+                                        widget
+                                            .user))) //         widget.user))),
+                            ),
                       Center(
                         child: Container(
                             padding:

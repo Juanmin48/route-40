@@ -23,7 +23,7 @@ class _HomepageState extends State<Homepage> {
   final LatLng _center = const LatLng(10.976778, -74.806306);
   LatLng _position = LatLng(10.976778, -74.806306);
   bool visibilitybuttons = true;
-
+  bool keyboard = false;
   final originController = TextEditingController();
   final destinationController = TextEditingController();
   List _routes = [];
@@ -42,7 +42,12 @@ class _HomepageState extends State<Homepage> {
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         setState(() {
-          visibilitybuttons = !visible;
+          if (_user == null) {
+            visibilitybuttons = !visible;
+          } else {
+            visibilitybuttons = false;
+          }
+          keyboard = visible;
         });
       },
     );
@@ -50,6 +55,13 @@ class _HomepageState extends State<Homepage> {
 
   void buscar() {
     getRoute();
+  }
+
+  void signOut() {
+    setState(() {
+      visibilitybuttons = true;
+      _user = null;
+    });
   }
 
   @override
@@ -95,6 +107,7 @@ class _HomepageState extends State<Homepage> {
                                   if (result != null) {
                                     setState(() {
                                       _user = result;
+                                      visibilitybuttons = false;
                                     });
                                   }
                                 });
@@ -127,6 +140,24 @@ class _HomepageState extends State<Homepage> {
                               },
                             ),
                           ),
+                        )
+                      : Container(),
+                  (!visibilitybuttons && !keyboard)
+                      ? Column(
+                          children: [
+                            SizedBox(height: 100),
+                            MaterialButton(
+                              onPressed: () => signOut(),
+                              child: Text(
+                                "Logout",
+                                style: TextStyle(fontSize: 20.0),
+                              ),
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                            ),
+                            SizedBox(height: 240),
+                          ],
                         )
                       : Container(),
                   Expanded(
