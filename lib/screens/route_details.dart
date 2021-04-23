@@ -27,18 +27,30 @@ class _RDetailsState extends State<RDetails> {
   @override
   void initState() {
     super.initState();
+    LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
+        double.parse(widget.route['origin']['x']));
+    LatLng destination = LatLng(double.parse(widget.route['destination']['y']),
+        double.parse(widget.route['destination']['x']));
+    LatLng pointFinal= LatLng(widget.route['pointFinal']['_latitude'],
+          widget.route['pointFinal']['_longitude']);
     setState(() {
       _center = LatLng(widget.route['pointInit']['_latitude'],
           widget.route['pointInit']['_longitude']);
-      LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
-          double.parse(widget.route['origin']['x']));
+
       _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
+      _markers.add(Marker(markerId: MarkerId('pointFinal'), position: pointFinal));
       _markers.add(Marker(
           markerId: MarkerId('pointInit'),
           position: origin,
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+      _markers.add(Marker(
+          markerId: MarkerId('pointInit'),
+          position: destination,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
     });
+
     createPolyline();
   }
 

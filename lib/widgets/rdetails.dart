@@ -28,6 +28,7 @@ Widget rdetails(
                   child: Favorite(
                     fav: fav,
                     user: user,
+                    route: route,
                   ))
           ],
         ),

@@ -314,8 +314,8 @@ class _LoginState extends State<Login> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0)),
                                           onPressed: () async {
-                                            getdata();
-                                            await Navigator.push(
+                                            await getdata();
+                                            Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => FRoutes(
@@ -368,8 +368,8 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void getdata() {
-    firestoreInstance
+  Future getdata() async {
+    await firestoreInstance
         .collection("users")
         .where("uid", isEqualTo: _user.uid)
         .get()

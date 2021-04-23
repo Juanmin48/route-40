@@ -29,6 +29,7 @@ class _FRoutesState extends State<FRoutes> {
     setState(() {
       _routes = widget.result;
     });
+    print(widget.result);
     super.initState();
   }
 
@@ -81,11 +82,11 @@ class _FRoutesState extends State<FRoutes> {
                                     (index) => route(
                                         context,
                                         "Ruta N°" + (index + 1).toString(),
-                                        _routes[index]['compañia'],
-                                        _routes[index]['ruta'],
+                                        _routes[index]['nameE'],
+                                        _routes[index]['nameR'],
                                         "Origen: ${_routes[index]['pointInit']}",
                                         "Destino: ${_routes[index]['pointFinal']}",
-                                        _routes[index]['tiempo'],
+                                        _routes[index]['time'],
                                         _routes[index],
                                         widget
                                             .user))) //         widget.user))),
