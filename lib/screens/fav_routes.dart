@@ -1,47 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:route_40/model/data_model.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:route_40/widgets/route.dart';
 
-class FRoutes extends StatefulWidget {
-  final LatLng iposition;
-  final dynamic result;
-  final User user;
-  const FRoutes({Key key, @required this.iposition, this.user, this.result})
-      : super(key: key);
-
-  @override
-  _FRoutesState createState() => _FRoutesState();
-}
-
-class _FRoutesState extends State<FRoutes> {
-  List<dynamic> _routes;
-  //Controlador del mapa
-  GoogleMapController mapController;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  @override
-  void initState() {
-    setState(() {
-      _routes = widget.result;
-    });
-    print(widget.result);
-    super.initState();
-  }
-
+class FRoutes extends StatelessWidget {
+  const FRoutes({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    return FRoutesScreen();
+  }
+}
+
+class FRoutesScreen extends StatelessWidget {
+  //Controlador del mapa
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<DataModel>(context);
+    GoogleMapController mapController;
+    void _onMapCreated(GoogleMapController controller) {
+      mapController = controller;
+    }
+
     return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: widget.iposition,
+              target: model.iposition,
               zoom: 13.0,
             ),
           ),
@@ -74,22 +63,21 @@ class _FRoutesState extends State<FRoutes> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      if (widget.result != null)
+                      if (model.routes != null)
                         Expanded(
                             child: ListView(
                                 children: List.generate(
-                                    _routes.length,
+                                    model.routes.length,
                                     (index) => route(
                                         context,
                                         "Ruta N°" + (index + 1).toString(),
-                                        _routes[index]['nameE'],
-                                        _routes[index]['nameR'],
-                                        "Origen: ${_routes[index]['pointInit']}",
-                                        "Destino: ${_routes[index]['pointFinal']}",
-                                        _routes[index]['time'],
-                                        _routes[index],
-                                        widget
-                                            .user))) //         widget.user))),
+                                        model.routes[index]['nameE'],
+                                        model.routes[index]['nameR'],
+                                        "Origen: ${model.routes[index]['pointInit']}",
+                                        "Destino: ${model.routes[index]['pointFinal']}",
+                                        model.routes[index]['time'],
+                                        model.routes[index],
+                                        model.user))) //         widget.user))),
                             ),
                       Center(
                         child: Container(
@@ -108,9 +96,7 @@ class _FRoutesState extends State<FRoutes> {
                                 Navigator.pop(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Login(
-                                            iposition: widget.iposition,
-                                          )),
+                                      builder: (context) => Login()),
                                 );
                               },
                             )),

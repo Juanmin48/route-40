@@ -1,40 +1,70 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:route_40/model/data_model.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Register extends StatefulWidget {
-  final LatLng iposition;
-
-  const Register({Key key, @required this.iposition}) : super(key: key);
-  @override
-  _RegisterState createState() => _RegisterState();
-}
-
-class _RegisterState extends State<Register> {
-  // Controlador del input nombre
-  final nameController = TextEditingController();
-  // Controlador del input nombre de usuario
-  final usernameController = TextEditingController();
-  // Controlador del input email
-  final emailController = TextEditingController();
-  // Controlador del input contraseña
-  final passwordController = TextEditingController();
-  // Controlador del input condirmar contraseña
-  final conpasswordController = TextEditingController();
-  GoogleMapController mapController;
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  String _errorMessage = "";
-  CollectionReference _users = FirebaseFirestore.instance.collection('users');
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
+class Register extends StatelessWidget {
+  const Register({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    return RegisterScreen();
+  }
+}
+
+class RegisterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<DataModel>(context);
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final conpasswordController = TextEditingController();
+    GoogleMapController mapController;
+    void _onMapCreated(GoogleMapController controller) {
+      mapController = controller;
+    }
+
+    Future addUSer(User _user) async {
+      model.users
+          .add({
+            'name': nameController.text,
+            'email': emailController.text,
+            'uid': _user.uid
+          })
+          .then((value) => print("Usuario añadido"))
+          .catchError((error) => print("Failed to add user: $error"));
+    }
+
+    Future register() async {
+      try {
+        if (passwordController.text == conpasswordController.text) {
+          await model.auth
+              .createUserWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passwordController.text)
+              .then((value) => {
+                    addUSer(value.user),
+                    print(nameController
+                        .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    )
+                  });
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          model.setMessage = 'Este email ya existe.';
+        } else if (e.code == 'weak-password') {
+          model.setMessage = 'Contraseña muy debil';
+        }
+      }
+    }
+
     return Scaffold(
         // resizeToAvoidBottomInset: false,
         body: Stack(
@@ -42,7 +72,7 @@ class _RegisterState extends State<Register> {
         GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: widget.iposition,
+            target: model.iposition,
             zoom: 13.0,
           ),
         ),
@@ -95,7 +125,7 @@ class _RegisterState extends State<Register> {
                           conpasswordController, "Confirmar contraseña", true),
                       Container(
                         padding: const EdgeInsets.only(top: 10),
-                        child: Text(_errorMessage,
+                        child: Text(model.errorMessage,
                             style: new TextStyle(
                               color: Color.fromRGBO(255, 154, 81, 1),
                             )),
@@ -130,9 +160,7 @@ class _RegisterState extends State<Register> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Login(
-                                          iposition: widget.iposition,
-                                        )),
+                                    builder: (context) => Login()),
                               );
                             },
                             child: Text(
@@ -147,46 +175,5 @@ class _RegisterState extends State<Register> {
         ),
       ],
     ));
-  }
-
-  Future addUSer(User _user) async {
-    _users
-        .add({
-          'name': nameController.text,
-          'email': emailController.text,
-          'uid': _user.uid
-        })
-        .then((value) => print("Usuario añadido"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
-  Future register() async {
-    try {
-      if (passwordController.text == conpasswordController.text) {
-        await _auth
-            .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text)
-            .then((value) => {
-                  addUSer(value.user),
-                  print(nameController
-                      .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Login(
-                              iposition: widget.iposition,
-                            )),
-                  )
-                });
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        _errorMessage = 'Este email ya existe.';
-        setState(() {});
-      } else if (e.code == 'weak-password') {
-        _errorMessage = 'Contraseña muy debil';
-        setState(() {});
-      }
-    }
   }
 }

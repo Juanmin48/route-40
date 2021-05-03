@@ -1,49 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:route_40/model/data_model.dart';
 import 'package:route_40/screens/main_page.dart';
 import 'package:route_40/widgets/route.dart';
 
-class PRoutes extends StatefulWidget {
-  final List routes;
-  final LatLng iposition;
-  final User user;
-  const PRoutes(
-      {Key key, @required this.routes, @required this.iposition, this.user})
-      : super(key: key);
-
-  @override
-  _PRoutesState createState() => _PRoutesState();
-}
-
-class _PRoutesState extends State<PRoutes> {
-  List _routes;
-  //Controlador del mapa
-  GoogleMapController mapController;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  @override
-  void initState() {
-    setState(() {
-      _routes = widget.routes;
-    });
-    print(_routes[0]);
-    print(_routes[0].runtimeType);
-    super.initState();
-  }
-
+class PRoutes extends StatelessWidget {
+  const PRoutes({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    return PRoutesScreen();
+  }
+}
+
+class PRoutesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<DataModel>(context);
+    GoogleMapController mapController;
+
+    void _onMapCreated(GoogleMapController controller) {
+      mapController = controller;
+    }
+
     return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: widget.iposition,
+              target: model.iposition,
               zoom: 13.0,
             ),
           ),
@@ -79,17 +66,17 @@ class _PRoutesState extends State<PRoutes> {
                       Expanded(
                         child: ListView(
                             children: List.generate(
-                                _routes.length,
+                                model.routes.length,
                                 (index) => route(
                                     context,
                                     "Ruta N°" + (index + 1).toString(),
-                                    _routes[index]['nameR'],
-                                    _routes[index]['nameE'],
-                                    "Origen: ${_routes[index]['pointInit']}",
-                                    "Destino: ${_routes[index]['pointFinal']}",
-                                    _routes[index]['time'],
-                                    _routes[index],
-                                    widget.user))),
+                                    model.routes[index]['nameR'],
+                                    model.routes[index]['nameE'],
+                                    "Origen: ${model.routes[index]['pointInit']}",
+                                    "Destino: ${model.routes[index]['pointFinal']}",
+                                    model.routes[index]['time'],
+                                    model.routes[index],
+                                    model.user))),
                       ),
                       Center(
                         child: Container(
