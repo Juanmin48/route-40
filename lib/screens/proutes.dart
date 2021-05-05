@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/model/data_model.dart';
 import 'package:route_40/screens/main_page.dart';
 import 'package:route_40/widgets/route.dart';

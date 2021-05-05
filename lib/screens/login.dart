@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/model/data_model.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
@@ -19,6 +21,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DataController dataController = Get.find();
     final model = Provider.of<DataModel>(context);
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
@@ -72,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                             flex: 5,
                             child: GoogleAuthButton(
                               onPressed: () {
-                                model.signInWithGoogle();
+                                dataController.signInWithGoogle();
                                 Navigator.of(context).pop();
                               },
                               darkMode: false,

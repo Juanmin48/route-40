@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/screens/route_details.dart';
 
 void send(context, index, route, user) {
+  DataController dataController = Get.find();
+  dataController.message('Este mensaje va para route details');
   Navigator.push(
     context,
     MaterialPageRoute(

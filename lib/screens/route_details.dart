@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/widgets/rdetails.dart';
 
 class RDetails extends StatefulWidget {
@@ -31,14 +33,15 @@ class _RDetailsState extends State<RDetails> {
         double.parse(widget.route['origin']['x']));
     LatLng destination = LatLng(double.parse(widget.route['destination']['y']),
         double.parse(widget.route['destination']['x']));
-    LatLng pointFinal= LatLng(widget.route['pointFinal']['_latitude'],
-          widget.route['pointFinal']['_longitude']);
+    LatLng pointFinal = LatLng(widget.route['pointFinal']['_latitude'],
+        widget.route['pointFinal']['_longitude']);
     setState(() {
       _center = LatLng(widget.route['pointInit']['_latitude'],
           widget.route['pointInit']['_longitude']);
 
       _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
-      _markers.add(Marker(markerId: MarkerId('pointFinal'), position: pointFinal));
+      _markers
+          .add(Marker(markerId: MarkerId('pointFinal'), position: pointFinal));
       _markers.add(Marker(
           markerId: MarkerId('pointInit'),
           position: origin,
@@ -72,6 +75,12 @@ class _RDetailsState extends State<RDetails> {
 
   @override
   Widget build(BuildContext context) {
+    DataController dataController = Get.find();
+    
+    void printt(msg) {
+      print(msg);
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -90,9 +99,16 @@ class _RDetailsState extends State<RDetails> {
                   bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 400.0,
-                  ),
+                  // SizedBox(
+                  //   height: 400.0,
+                  // ),
+                  Container(child:  MaterialButton(
+                      child: Text("Press"),
+                      onPressed: (){
+                        printt(dataController.user);
+                      },
+                    ),
+                    ),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
