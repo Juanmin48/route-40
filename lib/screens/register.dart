@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:route_40/model/data_model.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +18,7 @@ class Register extends StatelessWidget {
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<DataModel>(context);
+    DataController dc = Get.find();
     final nameController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
@@ -29,7 +29,7 @@ class RegisterScreen extends StatelessWidget {
     }
 
     Future addUSer(User _user) async {
-      model.users
+      dc.users
           .add({
             'name': nameController.text,
             'email': emailController.text,
@@ -42,7 +42,7 @@ class RegisterScreen extends StatelessWidget {
     Future register() async {
       try {
         if (passwordController.text == conpasswordController.text) {
-          await model.auth
+          await dc.auth
               .createUserWithEmailAndPassword(
                   email: emailController.text,
                   password: passwordController.text)
@@ -58,9 +58,9 @@ class RegisterScreen extends StatelessWidget {
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
-          model.setMessage = 'Este email ya existe.';
+          dc.errorMessage = 'Este email ya existe.';
         } else if (e.code == 'weak-password') {
-          model.setMessage = 'Contraseña muy debil';
+          dc.errorMessage = 'Contraseña muy debil';
         }
       }
     }
@@ -72,7 +72,7 @@ class RegisterScreen extends StatelessWidget {
         GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: model.iposition,
+            target: dc.iposition,
             zoom: 13.0,
           ),
         ),
@@ -125,7 +125,7 @@ class RegisterScreen extends StatelessWidget {
                           conpasswordController, "Confirmar contraseña", true),
                       Container(
                         padding: const EdgeInsets.only(top: 10),
-                        child: Text(model.errorMessage,
+                        child: Text(dc.errorMessage,
                             style: new TextStyle(
                               color: Color.fromRGBO(255, 154, 81, 1),
                             )),

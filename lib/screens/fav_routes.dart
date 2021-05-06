@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:route_40/model/data_model.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:route_40/widgets/route.dart';
 
@@ -18,7 +17,7 @@ class FRoutesScreen extends StatelessWidget {
   //Controlador del mapa
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<DataModel>(context);
+    DataController dc = Get.find();
     GoogleMapController mapController;
     void _onMapCreated(GoogleMapController controller) {
       mapController = controller;
@@ -30,7 +29,7 @@ class FRoutesScreen extends StatelessWidget {
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: model.iposition,
+              target: dc.iposition,
               zoom: 13.0,
             ),
           ),
@@ -63,21 +62,21 @@ class FRoutesScreen extends StatelessWidget {
                       SizedBox(
                         height: 15.0,
                       ),
-                      if (model.routes != null)
+                      if (dc.routes != null)
                         Expanded(
                             child: ListView(
                                 children: List.generate(
-                                    model.routes.length,
+                                    dc.routes.length,
                                     (index) => route(
                                         context,
                                         "Ruta N°" + (index + 1).toString(),
-                                        model.routes[index]['nameE'],
-                                        model.routes[index]['nameR'],
-                                        "Origen: ${model.routes[index]['pointInit']}",
-                                        "Destino: ${model.routes[index]['pointFinal']}",
-                                        model.routes[index]['time'],
-                                        model.routes[index],
-                                        model.user))) //         widget.user))),
+                                        dc.routes[index]['nameE'],
+                                        dc.routes[index]['nameR'],
+                                        "Origen: ${dc.routes[index]['pointInit']}",
+                                        "Destino: ${dc.routes[index]['pointFinal']}",
+                                        dc.routes[index]['time'],
+                                        dc.routes[index],
+                                        dc.user))) //         widget.user))),
                             ),
                       Center(
                         child: Container(

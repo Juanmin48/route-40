@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:route_40/model/data_controller.dart';
-import 'package:route_40/model/data_model.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/register.dart';
@@ -21,8 +19,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DataController dataController = Get.find();
-    final model = Provider.of<DataModel>(context);
+    DataController dc = Get.find();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
@@ -37,7 +34,7 @@ class LoginScreen extends StatelessWidget {
           GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: model.iposition,
+              target: dc.iposition,
               zoom: 13.0,
             ),
           ),
@@ -74,9 +71,9 @@ class LoginScreen extends StatelessWidget {
                           Expanded(
                             flex: 5,
                             child: GoogleAuthButton(
-                              onPressed: () {
-                                dataController.signInWithGoogle();
-                                Navigator.of(context).pop();
+                              onPressed: () async {
+                                await dc.signInWithGoogle();
+                                Navigator.of(context).pop(true);
                               },
                               darkMode: false,
                               style: AuthButtonStyle.icon,
@@ -93,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                     textbox(passwordController, "Contraseña", true),
                     Container(
                       padding: const EdgeInsets.only(top: 10),
-                      child: Text(model.errorMessage,
+                      child: Text(dc.errorMessage,
                           style: new TextStyle(
                             color: Color.fromRGBO(255, 154, 81, 1),
                           )),
@@ -113,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                           onPressed: () {
-                            model.signInFirebase(
+                            dc.signInFirebase(
                                 emailController.text, passwordController.text);
                             Navigator.of(context).pop();
                           }),

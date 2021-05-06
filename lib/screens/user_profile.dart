@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:route_40/model/data_model.dart';
+import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/screens/fav_routes.dart';
 import 'package:route_40/widgets/user_data.dart';
 
@@ -10,7 +10,7 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<DataModel>(context);
+    DataController dc = Get.find();
     GoogleMapController mapController;
     void _onMapCreated(GoogleMapController controller) {
       mapController = controller;
@@ -21,7 +21,7 @@ class UserProfile extends StatelessWidget {
       GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
-          target: model.iposition,
+          target: dc.iposition,
           zoom: 13.0,
         ),
       ),
@@ -77,7 +77,7 @@ class UserProfile extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                           onPressed: () {
-                            model.getdata();
+                            dc.getdata();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
