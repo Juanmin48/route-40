@@ -11,8 +11,6 @@ class DataController extends GetxController {
   final googleSignIn = GoogleSignIn();
   final firestoreInstance = FirebaseFirestore.instance;
   dynamic resultquery = [];
-  var visibilitybuttons = true.obs;
-  var keyboard = false.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
   String url;
@@ -25,8 +23,8 @@ class DataController extends GetxController {
     errorMessage = message;
   }
 
-  Future setRoutes(routes) async {
-    routes = routes;
+  Future setRoutes(proutes) async {
+    routes = proutes;
   }
 
   void setPosition(position) {
@@ -40,7 +38,7 @@ class DataController extends GetxController {
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        resultquery = result.data()["fav"];
+        resultquery = result.data();
       });
     });
   }
@@ -101,7 +99,6 @@ class DataController extends GetxController {
   Future signOut() async {
     await auth.signOut().then((value) => {
           _signOutGoogle(),
-          visibilitybuttons.value = true,
         });
   }
 
@@ -111,6 +108,7 @@ class DataController extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) => {
                 user = value.user,
+                getdata(),
               });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

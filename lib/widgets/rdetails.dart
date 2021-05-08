@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/widgets/favbutton.dart';
 
-void funcion(user, fav) {
-  //Agregar aqui codigo para agregar o eliminar ruta de los favoritos de @user dependiendo del booleano @fav
-}
-Widget rdetails(
-    index, name, company, origin, destination, time, route, user, fav) {
+Widget rdetails(name, company, origin, destination, time, route, user, fav) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -15,7 +11,7 @@ Widget rdetails(
             Expanded(
               flex: 8,
               child: Center(
-                child: Text(index,
+                child: Text("Detalles de ruta",
                     style: new TextStyle(
                         color: Color.fromRGBO(255, 154, 81, 1),
                         fontWeight: FontWeight.bold,

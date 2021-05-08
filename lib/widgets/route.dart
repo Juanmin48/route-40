@@ -3,23 +3,13 @@ import 'package:get/get.dart';
 import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/screens/route_details.dart';
 
-void send(context, index, route, user) {
-  DataController dataController = Get.find();
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) => RDetails(
-              index: index,
-              route: route,
-              user: user,
-            )),
-  );
+void send(route) {
+  Get.to(() => RDetails(), arguments: route);
 }
 
-Widget route(
-    context, index, name, company, origin, destination, time, route, user) {
+Widget route(index, name, company, origin, destination, time, route) {
   return MaterialButton(
-    onPressed: () => send(context, index, route, user),
+    onPressed: () => send(route),
     child: Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

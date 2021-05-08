@@ -3,25 +3,14 @@ import 'package:get/get.dart';
 import 'package:route_40/model/data_controller.dart';
 import 'package:social_auth_buttons/social_auth_buttons.dart';
 import 'package:route_40/widgets/textbox.dart';
-import 'package:route_40/screens/register.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Login extends StatelessWidget {
-  const Login({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return LoginScreen();
-  }
-}
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
-
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     DataController dc = Get.find();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
 
     GoogleMapController mapController;
     void _onMapCreated(GoogleMapController controller) {
@@ -63,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 38.0,
+                      height: 58.0,
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,38 +85,53 @@ class LoginScreen extends StatelessWidget {
                           )),
                     ),
                     SizedBox(
-                      height: 58.0,
+                      height: 38.0,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 180.0),
-                      height: 50,
-                      child: MaterialButton(
-                          child: Text("Ingresar",
-                              style: new TextStyle(
-                                fontSize: 20.0,
-                              )),
-                          color: Color.fromRGBO(255, 154, 81, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          onPressed: () {
-                            dc.signInFirebase(
-                                emailController.text, passwordController.text);
-                            Navigator.of(context).pop();
-                          }),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 30.0),
+                          height: 50,
+                          child: MaterialButton(
+                              child: Text("Ingresar",
+                                  style: new TextStyle(
+                                    fontSize: 20.0,
+                                  )),
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              onPressed: () {
+                                dc.signInFirebase(emailController.text,
+                                    passwordController.text);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/', (Route<dynamic> route) => false);
+                              }),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 50.0),
+                          height: 50,
+                          child: MaterialButton(
+                              child: Text("Cancelar",
+                                  style: new TextStyle(
+                                    fontSize: 20.0,
+                                  )),
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              onPressed: () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/', (Route<dynamic> route) => false);
+                              }),
+                        ),
+                      ],
                     ),
                     //Spacer(),
                     SizedBox(
                       height: 58.0,
                     ),
                     Container(
-                      child: FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Register()),
-                            );
-                          },
+                      child: TextButton(
+                          onPressed: () => Get.toNamed('/register'),
                           child: Text(
                             "¿No tienes cuenta? Registrate",
                             style: TextStyle(

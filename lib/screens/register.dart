@@ -1,28 +1,21 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/model/data_controller.dart';
+import 'package:route_40/widgets/menu.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatelessWidget {
-  const Register({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return RegisterScreen();
-  }
-}
-
-class RegisterScreen extends StatelessWidget {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final conpasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     DataController dc = Get.find();
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final conpasswordController = TextEditingController();
+
     GoogleMapController mapController;
     void _onMapCreated(GoogleMapController controller) {
       mapController = controller;
@@ -66,7 +59,6 @@ class RegisterScreen extends StatelessWidget {
     }
 
     return Scaffold(
-        // resizeToAvoidBottomInset: false,
         body: Stack(
       children: [
         GoogleMap(
@@ -132,36 +124,52 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       //Spacer(),
                       SizedBox(
-                        height: 38.0,
+                        height: 28.0,
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 180.0),
-                        height: 50,
-                        child: MaterialButton(
-                          child: Text("Registrar",
-                              style: new TextStyle(
-                                fontSize: 20.0,
-                              )),
-                          color: Color.fromRGBO(255, 154, 81, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          onPressed: () async {
-                            await register();
-                          },
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            height: 50,
+                            child: MaterialButton(
+                              child: Text("Registrar",
+                                  style: new TextStyle(
+                                    fontSize: 20.0,
+                                  )),
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              onPressed: () async {
+                                await register();
+                              },
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 50.0),
+                            height: 50,
+                            child: MaterialButton(
+                                child: Text("Cancelar",
+                                    style: new TextStyle(
+                                      fontSize: 20.0,
+                                    )),
+                                color: Color.fromRGBO(255, 154, 81, 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                onPressed: () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/', (Route<dynamic> route) => false);
+                                }),
+                          ),
+                        ],
                       ),
                       //Spacer(),
                       SizedBox(
-                        height: 58.0,
+                        height: 38.0,
                       ),
                       Container(
-                        child: FlatButton(
+                        child: TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()),
-                              );
+                              Get.toNamed('/login');
                             },
                             child: Text(
                               "¿Ya tienes cuenta? Inicia sesión",

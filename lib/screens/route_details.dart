@@ -6,12 +6,7 @@ import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/widgets/rdetails.dart';
 
 class RDetails extends StatefulWidget {
-  final String index;
-  final dynamic route;
-  final User user;
-  const RDetails(
-      {Key key, @required this.index, @required this.route, this.user})
-      : super(key: key);
+  final dynamic route = Get.arguments;
   @override
   _RDetailsState createState() => _RDetailsState();
 }
@@ -75,8 +70,8 @@ class _RDetailsState extends State<RDetails> {
 
   @override
   Widget build(BuildContext context) {
-    DataController dataController = Get.find();
-    
+    DataController dc = Get.find();
+
     void printt(msg) {
       print(msg);
     }
@@ -99,16 +94,9 @@ class _RDetailsState extends State<RDetails> {
                   bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  // SizedBox(
-                  //   height: 400.0,
-                  // ),
-                  Container(child:  MaterialButton(
-                      child: Text("Press"),
-                      onPressed: (){
-                        printt(dataController.user);
-                      },
-                    ),
-                    ),
+                  SizedBox(
+                    height: 320.0,
+                  ),
                   Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -123,18 +111,36 @@ class _RDetailsState extends State<RDetails> {
                             height: 15.0,
                           ),
                           rdetails(
-                              widget.index,
                               widget.route['nameR'],
                               widget.route['nameE'],
                               'Origen: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
                               'Destino: x: ${widget.route['pointInit']['_latitude'].toString()}, y: ${widget.route['pointInit']['_longitude'].toString()}',
                               widget.route['time'],
                               widget.route,
-                              widget.user,
+                              dc.user,
                               false), //El ultimo booleano es para saber si es favorita o no la ruta.
                           SizedBox(
-                            height: 15.0,
+                            height: 35.0,
                           ),
+                          Center(
+                            child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 90.0, right: 90.0),
+                                height: 50,
+                                child: MaterialButton(
+                                  child: Text("Atrás",
+                                      style: new TextStyle(
+                                        fontSize: 20.0,
+                                      )),
+                                  color: Color.fromRGBO(255, 154, 81, 1),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                )),
+                          )
                         ],
                       )),
                 ],
