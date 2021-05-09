@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/model/data_controller.dart';
-import 'package:route_40/widgets/menu.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:route_40/screens/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatelessWidget {
   final nameController = TextEditingController();
@@ -21,40 +19,16 @@ class Register extends StatelessWidget {
       mapController = controller;
     }
 
-    Future addUSer(User _user) async {
-      dc.users
-          .add({
-            'name': nameController.text,
-            'email': emailController.text,
-            'uid': _user.uid
-          })
-          .then((value) => print("Usuario añadido"))
-          .catchError((error) => print("Failed to add user: $error"));
-    }
-
     Future register() async {
-      try {
-        if (passwordController.text == conpasswordController.text) {
-          await dc.auth
-              .createUserWithEmailAndPassword(
-                  email: emailController.text,
-                  password: passwordController.text)
-              .then((value) => {
-                    addUSer(value.user),
-                    print(nameController
-                        .text), // ASI OBTIENES EL NOMBRE DEL USUARIO.
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    )
-                  });
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'email-already-in-use') {
-          dc.errorMessage = 'Este email ya existe.';
-        } else if (e.code == 'weak-password') {
-          dc.errorMessage = 'Contraseña muy debil';
-        }
+         if (emailController.text != "" && passwordController.text != "" && conpasswordController.text != "" && nameController.text != "") {
+        await dc.register(emailController.text, passwordController.text,
+          conpasswordController.text, nameController.text);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+      } else {
+        dc.showAlertDialog(context, 'Error', "Debe rellenar todos los campos");
       }
     }
 
@@ -101,20 +75,22 @@ class Register extends StatelessWidget {
                       SizedBox(
                         height: 58.0,
                       ),
-                      textbox(nameController, "Nombre", false),
+                      textbox(nameController, "Nombre", false, 'name'),
                       SizedBox(
                         height: 38.0,
                       ),
-                      textbox(emailController, "Correo electrónico", false),
-                      SizedBox(
-                        height: 38.0,
-                      ),
-                      textbox(passwordController, "Contraseña", true),
+                      textbox(emailController, "Correo electrónico", false,
+                          'emailR'),
                       SizedBox(
                         height: 38.0,
                       ),
                       textbox(
-                          conpasswordController, "Confirmar contraseña", true),
+                          passwordController, "Contraseña", true, 'passwordR'),
+                      SizedBox(
+                        height: 38.0,
+                      ),
+                      textbox(conpasswordController, "Confirmar contraseña",
+                          true, 'confirmationPass'),
                       Container(
                         padding: const EdgeInsets.only(top: 10),
                         child: Text(dc.errorMessage,
@@ -140,7 +116,7 @@ class Register extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
                               onPressed: () async {
-                                await register();
+                                register();
                               },
                             ),
                           ),

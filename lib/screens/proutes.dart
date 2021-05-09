@@ -80,20 +80,22 @@ class PRoutes extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                            Expanded(
-                              child: ListView(
-                                  children: List.generate(
-                                      dc.routes.length,
-                                      (index) => route(
-                                            "Ruta N°" + (index + 1).toString(),
-                                            dc.routes[index]['nameR'],
-                                            dc.routes[index]['nameE'],
-                                            "Origen: ${dc.routes[index]['pointInit']}",
-                                            "Destino: ${dc.routes[index]['pointFinal']}",
-                                            dc.routes[index]['time'],
-                                            dc.routes[index],
-                                          ))),
-                            ),
+                            if (dc.routes.length > 0)
+                              Expanded(
+                                child: ListView(
+                                    children: List.generate(
+                                        dc.routes.length,
+                                        (index) => route(
+                                              "Ruta N°" +
+                                                  (index + 1).toString(),
+                                              dc.routes[index]['nameR'],
+                                              dc.routes[index]['nameE'],
+                                              "Origen: ${dc.routes[index]['pointInit']}",
+                                              "Destino: ${dc.routes[index]['pointFinal']}",
+                                              dc.routes[index]['time'],
+                                              dc.routes[index],
+                                            ))),
+                              ),
                             Center(
                               child: Container(
                                   padding: const EdgeInsets.only(
@@ -109,6 +111,7 @@ class PRoutes extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(10.0)),
                                     onPressed: () {
+                                      dc.goback = false;
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil('/',
                                               (Route<dynamic> route) => false);

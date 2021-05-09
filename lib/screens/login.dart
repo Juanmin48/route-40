@@ -17,6 +17,16 @@ class Login extends StatelessWidget {
       mapController = controller;
     }
 
+    Future login() async {
+      if (emailController.text != "" && passwordController.text != "") {
+        await dc.signInFirebase(emailController.text, passwordController.text);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      } else {
+        dc.showAlertDialog(context, 'Error', "Debe rellenar todos los campos");
+      }
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -72,11 +82,13 @@ class Login extends StatelessWidget {
                     SizedBox(
                       height: 58.0,
                     ),
-                    textbox(emailController, "Correo electrónico", false),
+                    textbox(
+                        emailController, "Correo electrónico", false, 'emailL'),
                     SizedBox(
                       height: 38.0,
                     ),
-                    textbox(passwordController, "Contraseña", true),
+                    textbox(
+                        passwordController, "Contraseña", true, 'passwordL'),
                     Container(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(dc.errorMessage,
@@ -101,10 +113,7 @@ class Login extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
                               onPressed: () {
-                                dc.signInFirebase(emailController.text,
-                                    passwordController.text);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/', (Route<dynamic> route) => false);
+                                login();
                               }),
                         ),
                         Container(

@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:route_40/model/data_controller.dart';
-import 'package:route_40/screens/proutes.dart';
 import 'package:route_40/widgets/textbox.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,6 +19,8 @@ class _HomepageState extends State<Homepage> {
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   bool _visiblebuttons = true;
   final LatLng _center = const LatLng(10.976778, -74.806306);
+  final originController = TextEditingController();
+  final destinationController = TextEditingController();
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -40,8 +40,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    final originController = TextEditingController();
-    final destinationController = TextEditingController();
     Future<http.Response> getRoute() async {
       if (originController.text != "" && destinationController.text != "") {
         String param = 'api/find/' +
@@ -51,16 +49,23 @@ class _HomepageState extends State<Homepage> {
         var response =
             await http.get(Uri.https('route40-server.herokuapp.com', param));
         if (response.statusCode == 200) {
-          dc.routes = jsonDecode(response.body);
-          Get.toNamed('/proutes');
+          var r = jsonDecode(response.body);
+          if (r.length > 0) {
+            dc.routes = r;
+            Get.toNamed('/proutes');
+          } else {
+            dc.showAlertDialog(context, "Alerta", "No se han encontrado rutas");
+          }
         }
         return response;
       } else {
+        dc.showAlertDialog(context, "Error", "Debe rellenar todos los campos");
         return null;
       }
     }
 
     void buscar() {
+      dc.goback = false;
       getRoute();
     }
 
@@ -115,12 +120,13 @@ class _HomepageState extends State<Homepage> {
                         padding: const EdgeInsets.all(20.0),
                         alignment: Alignment.centerLeft,
                         child: ListView(children: [
-                          textbox(originController, "Lugar de origen", false),
+                          textbox(originController, "Lugar de origen", false,
+                              'origin'),
                           SizedBox(
                             height: 48.0,
                           ),
-                          textbox(
-                              destinationController, "Lugar de destino", false),
+                          textbox(destinationController, "Lugar de destino",
+                              false, 'destination'),
                           SizedBox(
                             height: 30.0,
                           ),

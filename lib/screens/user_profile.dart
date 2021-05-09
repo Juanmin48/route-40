@@ -83,7 +83,6 @@ class UserProfile extends StatelessWidget {
                               child: ListView(children: [
                                 userData("Nombre", "${dc.resultquery['name']}"),
                                 userData("E-mail", "${dc.resultquery['email']}")
-                                // userData("Nombre", "${dc.resultquery[0]["nameE"]}"),
                               ]),
                             ),
                             SizedBox(
@@ -104,7 +103,7 @@ class UserProfile extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(10.0)),
                                     onPressed: () {
-                                      dc.getdata();
+                                      dc.goback = true;
                                       Get.toNamed('/froutes');
                                     },
                                   )),
@@ -112,25 +111,6 @@ class UserProfile extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                            Center(
-                              child: Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 90.0, right: 90.0),
-                                  height: 50,
-                                  child: MaterialButton(
-                                    child: Text("Atrás",
-                                        style: new TextStyle(
-                                          fontSize: 20.0,
-                                        )),
-                                    color: Color.fromRGBO(255, 154, 81, 1),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )),
-                            )
                           ],
                         )),
                   ),

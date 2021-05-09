@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-Widget textbox(controller, message, cont) {
+Widget textbox(controller, message, cont, key) {
   return Container(
     decoration: BoxDecoration(
         color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
     child: TextField(
+      key: Key(key),
       obscureText: cont,
       controller: controller,
       decoration: InputDecoration(

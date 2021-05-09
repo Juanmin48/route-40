@@ -10,6 +10,7 @@ class FRoutes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DataController dc = Get.find();
+    print(dc.routes);
     GoogleMapController mapController;
     void _onMapCreated(GoogleMapController controller) {
       mapController = controller;
@@ -78,24 +79,24 @@ class FRoutes extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                            if (dc.routes != null)
+                            if (dc.resultquery["fav"].length > 0)
                               Expanded(
                                   child: ListView(
                                       children: List.generate(
                                           dc.resultquery["fav"].length,
                                           (index) => route(
                                               "Ruta N°" +
-                                                  (index + 1).toString(),
-                                              dc.resultquery["fav"][index]
+                                                  (0 + 1).toString(),
+                                              dc.resultquery["fav"][0]
                                                   ['nameE'],
-                                              dc.resultquery["fav"][index]
+                                              dc.resultquery["fav"][0]
                                                   ['nameR'],
-                                              "Origen: ${dc.resultquery["fav"][index]['pointInit']}",
-                                              "Destino: ${dc.resultquery["fav"][index]['pointFinal']}",
-                                              dc.resultquery["fav"][index]
+                                              "Origen: ${dc.resultquery["fav"][0]['pointInit']}",
+                                              "Destino: ${dc.resultquery["fav"][0]['pointFinal']}",
+                                              dc.resultquery["fav"][0]
                                                   ['time'],
                                               dc.resultquery["fav"][
-                                                  index]))) //         widget.user))),
+                                                  0]))) //         widget.user))),
                                   ),
                             Center(
                               child: Container(
@@ -112,6 +113,7 @@ class FRoutes extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(10.0)),
                                     onPressed: () {
+                                      dc.goback = true;
                                       Get.offAllNamed('/userprofile');
                                     },
                                   )),

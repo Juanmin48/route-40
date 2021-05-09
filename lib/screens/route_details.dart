@@ -12,6 +12,7 @@ class RDetails extends StatefulWidget {
 }
 
 class _RDetailsState extends State<RDetails> {
+  DataController dc = Get.find();
   GoogleMapController mapController;
   LatLng _center; //Reemplazar aqui la posición de origen
   List<Polyline> myPolyline = [];
@@ -24,6 +25,7 @@ class _RDetailsState extends State<RDetails> {
   @override
   void initState() {
     super.initState();
+    dc.goback = true;
     LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
         double.parse(widget.route['origin']['x']));
     LatLng destination = LatLng(double.parse(widget.route['destination']['y']),
@@ -70,12 +72,6 @@ class _RDetailsState extends State<RDetails> {
 
   @override
   Widget build(BuildContext context) {
-    DataController dc = Get.find();
-
-    void printt(msg) {
-      print(msg);
-    }
-
     return Scaffold(
       body: Stack(
         children: [
@@ -137,6 +133,7 @@ class _RDetailsState extends State<RDetails> {
                                       borderRadius:
                                           BorderRadius.circular(10.0)),
                                   onPressed: () {
+                                    dc.goback = false;
                                     Get.back();
                                   },
                                 )),

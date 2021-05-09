@@ -3,11 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:route_40/model/data_controller.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
+  @override
+  _MenuState createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  DataController dc = Get.find();
+  bool _user = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _user = dc.user != null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    DataController dc = Get.find();
-    bool user = dc.user != null;
     return new Drawer(
       child: Container(
         color: Color.fromRGBO(255, 154, 81, 1),
@@ -55,8 +69,15 @@ class Menu extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                       )),
-                  onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/', (Route<dynamic> route) => false),
+                  onTap: () {
+                    if (Get.currentRoute == "/") {
+                      Navigator.of(context).pop();
+                    } else {
+                      dc.goback = false;
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/', (Route<dynamic> route) => false);
+                    }
+                  },
                 ),
               ),
               Divider(
@@ -73,11 +94,15 @@ class Menu extends StatelessWidget {
                         fontSize: 18,
                       )),
                   onTap: () {
-                    if (user) {
-                      // print(dc.resultquery);
-                      Get.toNamed('/userprofile');
+                    if (Get.currentRoute == "/userprofile") {
+                      Navigator.of(context).pop();
                     } else {
-                      Get.toNamed('/login');
+                      if (_user) {
+                        // print(dc.resultquery);
+                        Get.toNamed('/userprofile');
+                      } else {
+                        Get.toNamed('/login');
+                      }
                     }
                   },
                 ),
@@ -110,7 +135,7 @@ class Menu extends StatelessWidget {
                 height: 10,
               ),
             ),
-            user
+            _user
                 ? Expanded(
                     flex: 1,
                     child: TextButton(
@@ -121,7 +146,18 @@ class Menu extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _user = false;
+                        });
+                        dc.signOut();
+                        if ((Get.currentRoute == "/rdetails") ||
+                            (Get.currentRoute == "/froutes") ||
+                            (dc.goback)) {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/', (Route<dynamic> route) => false);
+                        }
+                      },
                     ),
                   )
                 : Expanded(
