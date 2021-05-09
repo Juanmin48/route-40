@@ -80,22 +80,20 @@ class PRoutes extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                            if (dc.routes.length > 0)
-                              Expanded(
-                                child: ListView(
-                                    children: List.generate(
-                                        dc.routes.length,
-                                        (index) => route(
-                                              "Ruta N°" +
-                                                  (index + 1).toString(),
-                                              dc.routes[index]['nameR'],
-                                              dc.routes[index]['nameE'],
-                                              "Origen: ${dc.routes[index]['pointInit']}",
-                                              "Destino: ${dc.routes[index]['pointFinal']}",
-                                              dc.routes[index]['time'],
-                                              dc.routes[index],
-                                            ))),
-                              ),
+                            Expanded(
+                              child: ListView(
+                                  children: List.generate(
+                                      dc.routes.length,
+                                      (index) => route(
+                                            "Ruta N°" + (index + 1).toString(),
+                                            dc.routes[index]['nameR'],
+                                            dc.routes[index]['nameE'],
+                                            "Origen: ${dc.routes[index]['pointInit']}",
+                                            "Destino: ${dc.routes[index]['pointFinal']}",
+                                            dc.routes[index]['time'],
+                                            dc.routes[index],
+                                          ))),
+                            ),
                             Center(
                               child: Container(
                                   padding: const EdgeInsets.only(

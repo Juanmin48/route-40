@@ -79,7 +79,6 @@ class FRoutes extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                            if (dc.resultquery["fav"].length > 0)
                               Expanded(
                                   child: ListView(
                                       children: List.generate(

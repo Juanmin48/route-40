@@ -21,6 +21,7 @@ class DataController extends GetxController {
   List routes;
   bool loginGoogle = false;
   bool goback;
+  String nameUser;
 
   Future getdata() async {
     await firestoreInstance
@@ -53,7 +54,7 @@ class DataController extends GetxController {
                 {
                   users
                       .add({
-                        'name': user.displayName,
+                        'name': user.displayName != null ? user.displayName : nameUser,
                         'email': user.email,
                         'uid': user.uid
                       })
@@ -129,6 +130,7 @@ class DataController extends GetxController {
           .then((value) => {
                 user = value.user,
                 getdata(),
+                errorMessage = "",
               });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -147,9 +149,12 @@ class DataController extends GetxController {
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) => {
                   user = value.user,
+                  nameUser = name,
                   addUSer(),
-                  print(name), // ASI OBTIENES EL NOMBRE DEL USUARIO.
+                  errorMessage = "", // ASI OBTIENES EL NOMBRE DEL USUARIO.
                 });
+      } else {
+        errorMessage = 'Las contraseñas no coinciden.';
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

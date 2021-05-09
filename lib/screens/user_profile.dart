@@ -17,6 +17,20 @@ class UserProfile extends StatelessWidget {
       mapController = controller;
     }
 
+    void goToFav() {
+      if (dc.resultquery["fav"] != null) {
+        if (dc.resultquery["fav"].length > 0) {
+          Get.toNamed('/froutes');
+        } else {
+          dc.showAlertDialog(
+              context, "Alerta", "No se han encontrado rutas favoritas");
+        }
+      } else {
+        dc.showAlertDialog(
+            context, "Alerta", "No se han encontrado rutas favoritas");
+      }
+    }
+
     return Scaffold(
         key: globalKey,
         drawer: Menu(),
@@ -103,8 +117,7 @@ class UserProfile extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(10.0)),
                                     onPressed: () {
-                                      dc.goback = true;
-                                      Get.toNamed('/froutes');
+                                      goToFav();
                                     },
                                   )),
                             ),
