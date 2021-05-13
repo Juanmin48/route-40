@@ -146,14 +146,13 @@ class _MenuState extends State<Menu> {
                           fontSize: 20,
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        await dc.signOut();
                         setState(() {
                           _user = false;
                         });
-                        dc.signOut();
                         if ((Get.currentRoute == "/rdetails") ||
-                            (Get.currentRoute == "/froutes") ||
-                            (dc.goback)) {
+                            (Get.currentRoute == "/froutes")) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/', (Route<dynamic> route) => false);
                         }

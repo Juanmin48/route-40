@@ -28,7 +28,7 @@ class Register extends StatelessWidget {
             conpasswordController.text, nameController.text);
         if (dc.errorMessage == "") {
           Navigator.of(context).pushNamedAndRemoveUntil(
-              '/login', (Route<dynamic> route) => false);
+              '/', (Route<dynamic> route) => false);
         } else {
           dc.showAlertDialog(context, 'Error', dc.errorMessage);
         }

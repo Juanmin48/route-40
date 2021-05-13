@@ -92,7 +92,7 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(find.widgetWithText(MaterialButton, "Buscar"));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       expect('/', Get.currentRoute);
       expect(find.byType(AlertDialog), findsOneWidget);
@@ -183,6 +183,13 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 3));
 
       expect('/', Get.currentRoute);
+      await tester.tap(find.widgetWithIcon(MaterialButton, Icons.menu));
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      expect(find.widgetWithText(TextButton, "Cerrar sesión"), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, "Cerrar sesión"));
+      await tester.pumpAndSettle(Duration(seconds: 5));
     });
 
     testWidgets('Try to log in but the fields are empty',
@@ -203,7 +210,7 @@ void main() {
       expect(find.widgetWithText(MaterialButton, "Ingresar"), findsOneWidget);
 
       await tester.tap(find.widgetWithText(MaterialButton, "Ingresar"));
-      await tester.pumpAndSettle(Duration(seconds: 2));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       expect('/login', Get.currentRoute);
       expect(find.byType(AlertDialog), findsOneWidget);
@@ -249,7 +256,8 @@ void main() {
       expect(find.byType(AlertDialog), findsOneWidget);
     });
 
-    testWidgets('Try to register with correct credentials', (WidgetTester tester) async {
+    testWidgets('Try to register with correct credentials',
+        (WidgetTester tester) async {
       Widget w = await createHomeScreen();
       await tester.pumpWidget(w);
 
@@ -285,7 +293,7 @@ void main() {
       await tester.tap(email);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(email, 'jon1@gmail.com');
+      await tester.enterText(email, 'jon11@gmail.com');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(password);
@@ -307,9 +315,17 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(find.widgetWithText(MaterialButton, "Registrar"));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
-      expect('/login', Get.currentRoute);
+      expect('/', Get.currentRoute);
+
+      await tester.tap(find.widgetWithIcon(MaterialButton, Icons.menu));
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      expect(find.widgetWithText(TextButton, "Cerrar sesión"), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, "Cerrar sesión"));
+      await tester.pumpAndSettle(Duration(seconds: 5));
     });
 
     testWidgets('Try to register but the fields are empty',
@@ -336,13 +352,14 @@ void main() {
       expect('/register', Get.currentRoute);
 
       await tester.tap(find.widgetWithText(MaterialButton, "Registrar"));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       expect('/register', Get.currentRoute);
       expect(find.byType(AlertDialog), findsOneWidget);
     });
 
-    testWidgets('Try to register but the password and confirmation password do no match',
+    testWidgets(
+        'Try to register but the password and confirmation password do no match',
         (WidgetTester tester) async {
       Widget w = await createHomeScreen();
       await tester.pumpWidget(w);
@@ -401,14 +418,13 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(find.widgetWithText(MaterialButton, "Registrar"));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       expect('/register', Get.currentRoute);
       expect(find.byType(AlertDialog), findsOneWidget);
     });
 
-    testWidgets(
-        'Try to register but the email is already in use',
+    testWidgets('Try to register but the email is already in use',
         (WidgetTester tester) async {
       Widget w = await createHomeScreen();
       await tester.pumpWidget(w);
@@ -467,13 +483,13 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(find.widgetWithText(MaterialButton, "Registrar"));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       expect('/register', Get.currentRoute);
       expect(find.byType(AlertDialog), findsOneWidget);
     });
 
-   testWidgets('Try to get the user info', (WidgetTester tester) async {
+    testWidgets('Try to get the user info', (WidgetTester tester) async {
       Widget w = await createHomeScreen();
       final email = find.byKey(Key('emailL'));
       final password = find.byKey(Key('passwordL'));
@@ -519,6 +535,14 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 3));
 
       expect('/userprofile', Get.currentRoute);
+
+      await tester.tap(find.widgetWithIcon(MaterialButton, Icons.menu));
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      expect(find.widgetWithText(TextButton, "Cerrar sesión"), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, "Cerrar sesión"));
+      await tester.pumpAndSettle(Duration(seconds: 5));
     });
 
     testWidgets(
@@ -578,6 +602,14 @@ void main() {
       expect('/froutes', Get.currentRoute);
       expect(find.byType(ListView), findsOneWidget);
       expect(find.widgetWithText(MaterialButton, "Ruta N°1"), findsOneWidget);
+
+      await tester.tap(find.widgetWithIcon(MaterialButton, Icons.menu));
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      expect(find.widgetWithText(TextButton, "Cerrar sesión"), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(TextButton, "Cerrar sesión"));
+      await tester.pumpAndSettle(Duration(seconds: 5));
     });
 
     testWidgets(
@@ -771,8 +803,7 @@ void main() {
       await tester.tap(find.widgetWithIcon(IconButton, Icons.star_border));
       await tester.pumpAndSettle(Duration(seconds: 5));
 
-      expect(
-          find.widgetWithIcon(IconButton, Icons.star), findsOneWidget);
+      expect(find.widgetWithIcon(IconButton, Icons.star), findsOneWidget);
     });
 
     testWidgets('Try to delete a favorite route', (WidgetTester tester) async {
@@ -847,6 +878,5 @@ void main() {
       expect(
           find.widgetWithIcon(IconButton, Icons.star_border), findsOneWidget);
     });
-
   });
 }
