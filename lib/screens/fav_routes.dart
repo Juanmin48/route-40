@@ -85,17 +85,17 @@ class FRoutes extends StatelessWidget {
                                           dc.resultquery["fav"].length,
                                           (index) => route(
                                               "Ruta N°" +
-                                                  (0 + 1).toString(),
-                                              dc.resultquery["fav"][0]
+                                                  (index + 1).toString(),
+                                              dc.resultquery["fav"][index]
                                                   ['nameE'],
-                                              dc.resultquery["fav"][0]
+                                              dc.resultquery["fav"][index]
                                                   ['nameR'],
-                                              "Origen: ${dc.resultquery["fav"][0]['pointInit']}",
-                                              "Destino: ${dc.resultquery["fav"][0]['pointFinal']}",
-                                              dc.resultquery["fav"][0]
+                                              "Origen: ${dc.resultquery["fav"][index]['pointInit']}",
+                                              "Destino: ${dc.resultquery["fav"][index]['pointFinal']}",
+                                              dc.resultquery["fav"][index]
                                                   ['time'],
                                               dc.resultquery["fav"][
-                                                  0]))) //         widget.user))),
+                                                  index]))) //         widget.user))),
                                   ),
                             Center(
                               child: Container(
