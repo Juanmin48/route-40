@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/widgets/rdetails.dart';
 
@@ -14,18 +15,27 @@ class RDetails extends StatefulWidget {
 class _RDetailsState extends State<RDetails> {
   DataController dc = Get.find();
   GoogleMapController mapController;
-  LatLng _center; //Reemplazar aqui la posición de origen
+  LatLng _center, _busloc; //Reemplazar aqui la posición de origen
   List<Polyline> myPolyline = [];
+  BitmapDescriptor myIcon;
   final Set<Marker> _markers = Set();
-
+  LocationData currentLocation;
+  Location location;
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    showPinsOnMap();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    dc.goback = true;
+  void setCustomIcon() async {
+    myIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/busicon.png');
+  }
+
+  void setInitialLocation() async {
+    currentLocation = await location.getLocation();
+  }
+
+  void showPinsOnMap() {
     LatLng origin = LatLng(double.parse(widget.route['origin']['y']),
         double.parse(widget.route['origin']['x']));
     LatLng destination = LatLng(double.parse(widget.route['destination']['y']),
@@ -33,34 +43,49 @@ class _RDetailsState extends State<RDetails> {
     LatLng pointFinal = LatLng(widget.route['pointFinal']['_latitude'],
         widget.route['pointFinal']['_longitude']);
     setState(() {
-      _center = LatLng(widget.route['pointInit']['_latitude'],
-          widget.route['pointInit']['_longitude']);
+      _busloc = const LatLng(11.002322569824626, -74.82180969439075);
 
       _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
       _markers
           .add(Marker(markerId: MarkerId('pointFinal'), position: pointFinal));
       _markers.add(Marker(
-          markerId: MarkerId('pointInit'),
+          markerId: MarkerId('Origin'),
           position: origin,
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
       _markers.add(Marker(
-          markerId: MarkerId('pointInit'),
+          markerId: MarkerId('Destination'),
           position: destination,
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+      _markers.add(Marker(
+          markerId: MarkerId('BusLocation'), position: _busloc, icon: myIcon));
     });
-
     createPolyline();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    dc.goback = true;
+    location = new Location();
+
+    location.onLocationChanged.listen((LocationData cLoc) {
+      currentLocation = cLoc;
+    });
+    setState(() {
+      _center = LatLng(widget.route['pointInit']['_latitude'],
+          widget.route['pointInit']['_longitude']);
+    });
+    setCustomIcon();
+    setInitialLocation();
+  }
+
   createPolyline() {
-    print(widget.route);
     List<LatLng> points = [];
     for (var item in widget.route['route']) {
       points.add(LatLng(item['_latitude'], item['_longitude']));
     }
-    print(points);
     myPolyline.add(
       Polyline(
           polylineId: PolylineId('1'),
@@ -81,6 +106,8 @@ class _RDetailsState extends State<RDetails> {
               target: _center,
               zoom: 17.0,
             ),
+            myLocationEnabled: true,
+            compassEnabled: true,
             polylines: myPolyline.toSet(),
             markers: _markers,
           ),
@@ -91,7 +118,7 @@ class _RDetailsState extends State<RDetails> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 320.0,
+                    height: 410.0,
                   ),
                   Container(
                       decoration: BoxDecoration(
@@ -103,9 +130,6 @@ class _RDetailsState extends State<RDetails> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(
-                            height: 15.0,
-                          ),
                           rdetails(
                               widget.route['nameR'],
                               widget.route['nameE'],
@@ -116,7 +140,7 @@ class _RDetailsState extends State<RDetails> {
                               dc.user,
                               false), //El ultimo booleano es para saber si es favorita o no la ruta.
                           SizedBox(
-                            height: 35.0,
+                            height: 20.0,
                           ),
                           Center(
                             child: Container(

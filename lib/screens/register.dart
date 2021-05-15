@@ -10,6 +10,10 @@ class Register extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final conpasswordController = TextEditingController();
+  final nfocus = FocusNode();
+  final efocus = FocusNode();
+  final pfocus = FocusNode();
+  final pcfocus = FocusNode();
   @override
   Widget build(BuildContext context) {
     DataController dc = Get.find();
@@ -27,8 +31,8 @@ class Register extends StatelessWidget {
         await dc.register(emailController.text, passwordController.text,
             conpasswordController.text, nameController.text);
         if (dc.errorMessage == "") {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/', (Route<dynamic> route) => false);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
         } else {
           dc.showAlertDialog(context, 'Error', dc.errorMessage);
         }
@@ -85,22 +89,23 @@ class Register extends StatelessWidget {
                           SizedBox(
                             height: 58.0,
                           ),
-                          textbox(nameController, "Nombre", false, 'nameR'),
+                          textbox(
+                              nameController, "Nombre", false, 'nameR', nfocus),
                           SizedBox(
                             height: 38.0,
                           ),
                           textbox(emailController, "Correo electrónico", false,
-                              'emailR'),
+                              'emailR', efocus),
                           SizedBox(
                             height: 38.0,
                           ),
                           textbox(passwordController, "Contraseña", true,
-                              'passwordR'),
+                              'passwordR', pfocus),
                           SizedBox(
                             height: 38.0,
                           ),
                           textbox(conpasswordController, "Confirmar contraseña",
-                              true, 'confirmationPass'),
+                              true, 'confirmationPass', pcfocus),
                           Container(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(dc.errorMessage,

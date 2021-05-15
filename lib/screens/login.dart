@@ -8,6 +8,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class Login extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final efocus = FocusNode();
+  final pfocus = FocusNode();
   @override
   Widget build(BuildContext context) {
     DataController dc = Get.find();
@@ -92,12 +94,12 @@ class Login extends StatelessWidget {
                           height: 58.0,
                         ),
                         textbox(emailController, "Correo electrónico", false,
-                            'emailL'),
+                            'emailL', efocus),
                         SizedBox(
                           height: 38.0,
                         ),
                         textbox(passwordController, "Contraseña", true,
-                            'passwordL'),
+                            'passwordL', pfocus),
                         // Container(
                         //   padding: const EdgeInsets.only(top: 10),
                         //   child: Text(dc.errorMessage,

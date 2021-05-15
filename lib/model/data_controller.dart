@@ -22,6 +22,12 @@ class DataController extends GetxController {
   bool loginGoogle = false;
   bool goback;
   String nameUser;
+  BitmapDescriptor myIcon;
+
+  void setCustomIcon() async {
+    myIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/busicon.png');
+  }
 
   Future getdata() async {
     await firestoreInstance
@@ -54,7 +60,9 @@ class DataController extends GetxController {
                 {
                   users
                       .add({
-                        'name': user.displayName != null ? user.displayName : nameUser,
+                        'name': user.displayName != null
+                            ? user.displayName
+                            : nameUser,
                         'email': user.email,
                         'uid': user.uid
                       })

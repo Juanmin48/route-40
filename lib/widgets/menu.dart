@@ -50,7 +50,7 @@ class _MenuState extends State<Menu> {
             Expanded(
               flex: 2,
               child: Container(
-                padding: EdgeInsets.all(40),
+                padding: EdgeInsets.all(60),
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
