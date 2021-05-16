@@ -38,7 +38,11 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    dc.setCustomIcon();
     location = new Location();
+
+    originController.text = 'Cra. 46 #84-78';
+    destinationController.text = 'Cl. 90 # 46-112';
 
     location.onLocationChanged.listen((LocationData cLoc) {
       currentLocation = cLoc;
@@ -71,6 +75,14 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    void startRoute() {
+      for (var route in dc.routes) {
+        String param =
+            '/api/busLocation/' + route['nameE'] + ';' + route['nameR'];
+        http.get(Uri.https('route40-server.herokuapp.com', param));
+      }
+    }
+
     Future<http.Response> getRoute() async {
       if (originController.text != "" && destinationController.text != "") {
         List<geocoding.Location> origin = await geocoding
@@ -91,6 +103,7 @@ class _HomepageState extends State<Homepage> {
           var r = jsonDecode(response.body);
           if (r.length > 0) {
             dc.routes = r;
+            startRoute();
             Get.toNamed('/proutes');
           } else {
             dc.showAlertDialog(context, "Alerta", "No se han encontrado rutas");

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_40/model/data_controller.dart';
-import 'package:route_40/screens/fav_routes.dart';
 import 'package:route_40/widgets/menu.dart';
 import 'package:route_40/widgets/user_data.dart';
+import 'package:http/http.dart' as http;
 
 class UserProfile extends StatelessWidget {
   static final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
@@ -17,9 +17,18 @@ class UserProfile extends StatelessWidget {
       mapController = controller;
     }
 
+    void startRoute() {
+      for (var route in dc.resultquery["fav"]) {
+        String param =
+            '/api/busLocation/' + route['nameE'] + ';' + route['nameR'];
+        http.get(Uri.https('route40-server.herokuapp.com', param));
+      }
+    }
+
     void goToFav() {
       if (dc.resultquery["fav"] != null) {
         if (dc.resultquery["fav"].length > 0) {
+          startRoute();
           Get.toNamed('/froutes');
         } else {
           dc.showAlertDialog(

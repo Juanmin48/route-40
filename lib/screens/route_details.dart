@@ -1,10 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/widgets/rdetails.dart';
+import 'package:http/http.dart' as http;
 
 class RDetails extends StatefulWidget {
   final dynamic route = Get.arguments;
@@ -21,14 +22,10 @@ class _RDetailsState extends State<RDetails> {
   final Set<Marker> _markers = Set();
   LocationData currentLocation;
   Location location;
+  final database = FirebaseDatabase.instance.reference();
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     showPinsOnMap();
-  }
-
-  void setCustomIcon() async {
-    myIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'images/busicon.png');
   }
 
   void setInitialLocation() async {
@@ -43,7 +40,6 @@ class _RDetailsState extends State<RDetails> {
     LatLng pointFinal = LatLng(widget.route['pointFinal']['_latitude'],
         widget.route['pointFinal']['_longitude']);
     setState(() {
-      _busloc = const LatLng(11.002322569824626, -74.82180969439075);
 
       _markers.add(Marker(markerId: MarkerId('pointInit'), position: _center));
       _markers
@@ -58,8 +54,6 @@ class _RDetailsState extends State<RDetails> {
           position: destination,
           icon:
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
-      _markers.add(Marker(
-          markerId: MarkerId('BusLocation'), position: _busloc, icon: myIcon));
     });
     createPolyline();
   }
@@ -73,12 +67,36 @@ class _RDetailsState extends State<RDetails> {
     location.onLocationChanged.listen((LocationData cLoc) {
       currentLocation = cLoc;
     });
+    read(widget.route);
     setState(() {
       _center = LatLng(widget.route['pointInit']['_latitude'],
           widget.route['pointInit']['_longitude']);
+      _markers.add(Marker(
+          markerId: MarkerId('BusLocation'), position: LatLng(double.parse(widget.route['origin']['y']),
+        double.parse(widget.route['origin']['x'])), icon: dc.myIcon));
     });
-    setCustomIcon();
     setInitialLocation();
+  }
+
+  void read(route) {
+    database
+        .child(route['nameE'] + ':' + route['nameR'])
+        .onValue
+        .listen((event) {
+      var value = event.snapshot.value;
+      setState(() {
+        _busloc = new LatLng(value['poss']['lat'], value['poss']['long']);
+        _markers.removeWhere((m) => m.markerId.value == 'BusLocation');
+        _markers.add(Marker(
+            markerId: MarkerId('BusLocation'),
+            position: _busloc,
+            icon: dc.myIcon));
+      });
+
+      if(value['end']) {
+        http.get(Uri.https('route40-server.herokuapp.com', '/api/busLocation/' + route['nameE'] + ';' + route['nameR']));
+      }
+    });
   }
 
   createPolyline() {
