@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:route_40/model/data_controller.dart';
 import 'package:route_40/screens/fav_routes.dart';
@@ -49,10 +50,13 @@ void main() {
       await tester.pumpWidget(w);
 
       await tester.tap(origin);
-      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.enterText(origin, 'cl 64 # 44');
       await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(find.byKey(Key('HomeG')));
+      await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
@@ -137,7 +141,11 @@ void main() {
 
       await tester.tap(find.widgetWithText(MaterialButton, "Ruta N°1"));
       await tester.pumpAndSettle(Duration(seconds: 5));
+
+      await tester.pump(Duration(seconds: 4));
       expect('/() => RDetails', Get.currentRoute);
+
+      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
     });
 
     testWidgets('Try to log in with correct credentials',
@@ -727,7 +735,11 @@ void main() {
       await tester.tap(find.widgetWithText(MaterialButton, "Ruta N°1"));
       await tester.pumpAndSettle(Duration(seconds: 3));
 
+      await tester.pump(Duration(seconds: 4));
+
       expect('/() => RDetails', Get.currentRoute);
+
+      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
     });
 
     testWidgets('Try to add a favorite route', (WidgetTester tester) async {
@@ -772,14 +784,14 @@ void main() {
       await tester.tap(origin);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(origin, '11.006058664612853,-74.82924466825544');
+      await tester.enterText(origin, 'Universidad del atlantico');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
       await tester.enterText(
-          destination, '10.992846496729307,-74.81869306099304');
+          destination, 'Le Champ');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -793,7 +805,11 @@ void main() {
       await tester.tap(find.widgetWithText(MaterialButton, "Ruta N°1"));
       await tester.pumpAndSettle(Duration(seconds: 5));
 
+      await tester.pump(Duration(seconds: 4));
+
       expect('/() => RDetails', Get.currentRoute);
+
+      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
 
       expect(
           find.widgetWithIcon(IconButton, Icons.star_border), findsOneWidget);
@@ -845,14 +861,14 @@ void main() {
       await tester.tap(origin);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(origin, '11.006058664612853,-74.82924466825544');
+      await tester.enterText(origin, 'Universidad del atlantico');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
       await tester.enterText(
-          destination, '10.992846496729307,-74.81869306099304');
+          destination, 'Le Champ');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -866,7 +882,11 @@ void main() {
       await tester.tap(find.widgetWithText(MaterialButton, "Ruta N°1"));
       await tester.pumpAndSettle(Duration(seconds: 5));
 
+      await tester.pump(Duration(seconds: 4));
+
       expect('/() => RDetails', Get.currentRoute);
+
+      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
 
       expect(find.widgetWithIcon(IconButton, Icons.star), findsOneWidget);
       await tester.tap(find.widgetWithIcon(IconButton, Icons.star));

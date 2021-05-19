@@ -133,123 +133,130 @@ class _HomepageState extends State<Homepage> {
       originController.text = ubicacionA[0].street;
     }
 
-    return Stack(
-      children: [
-        GoogleMap(
-          onMapCreated: _onMapCreated,
-          myLocationEnabled: true,
-          compassEnabled: true,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 13.0,
+    return GestureDetector(
+      key: Key('HomeG'),
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            compassEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: 13.0,
+            ),
+            onCameraMove: (CameraPosition position) {
+              dc.iposition = position.target;
+            },
           ),
-          onCameraMove: (CameraPosition position) {
-            dc.iposition = position.target;
-          },
-        ),
-        Container(
-            padding: const EdgeInsets.only(
-                bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
-            alignment: Alignment.centerLeft,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _visiblebuttons
-                      ? Container(
-                          padding:
-                              EdgeInsets.only(right: 297, top: 5, bottom: 355),
-                          alignment: Alignment.center,
-                          child: MaterialButton(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 8),
-                              child: Icon(
-                                Icons.menu,
-                                size: 32,
+          Container(
+              padding: const EdgeInsets.only(
+                  bottom: 16.0, top: 36.0, left: 16.0, right: 16.0),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _visiblebuttons
+                        ? Container(
+                            padding: EdgeInsets.only(
+                                right: 297, top: 5, bottom: 355),
+                            alignment: Alignment.center,
+                            child: MaterialButton(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8, bottom: 8),
+                                child: Icon(
+                                  Icons.menu,
+                                  size: 32,
+                                ),
                               ),
+                              color: Color.fromRGBO(255, 154, 81, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
                             ),
-                            color: Color.fromRGBO(255, 154, 81, 1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            onPressed: () {
-                              Scaffold.of(context).openDrawer();
-                            },
+                          )
+                        : Container(),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Color.fromRGBO(38, 28, 20, 0.8),
                           ),
-                        )
-                      : Container(),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Color.fromRGBO(38, 28, 20, 0.8),
-                        ),
-                        padding: const EdgeInsets.all(20.0),
-                        alignment: Alignment.centerLeft,
-                        child: ListView(children: [
-                          !_destFocus
-                              ? textbox(originController, "Lugar de origen",
-                                  false, 'origin', _focusOrigin)
-                              : Container(),
-                          _orFocus
-                              ? SizedBox(
-                                  height: 10.0,
-                                )
-                              : Container(),
-                          _orFocus
-                              ? TextButton(
-                                  onPressed: () => useLocation(),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.pin_drop_outlined,
-                                          color: Colors.white),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        "Usar ubicación actual",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
+                          padding: const EdgeInsets.all(20.0),
+                          alignment: Alignment.centerLeft,
+                          child: ListView(children: [
+                            !_destFocus
+                                ? textbox(originController, "Lugar de origen",
+                                    false, 'origin', _focusOrigin)
+                                : Container(),
+                            _orFocus
+                                ? SizedBox(
+                                    height: 10.0,
+                                  )
+                                : Container(),
+                            _orFocus
+                                ? TextButton(
+                                    onPressed: () => useLocation(),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.pin_drop_outlined,
+                                            color: Colors.white),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "Usar ubicación actual",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ))
-                              : Container(),
-                          !_destFocus
-                              ? SizedBox(
-                                  height: 48.0,
-                                )
-                              : Container(),
-                          !_orFocus
-                              ? textbox(
-                                  destinationController,
-                                  "Lugar de destino",
-                                  false,
-                                  'destination',
-                                  _focusDestination)
-                              : Container(),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          (!_orFocus && !_destFocus)
-                              ? Container(
-                                  padding: const EdgeInsets.only(left: 180.0),
-                                  height: 50,
-                                  child: MaterialButton(
-                                      child: Text("Buscar",
-                                          style: new TextStyle(
-                                            fontSize: 20.0,
-                                          )),
-                                      color: Color.fromRGBO(255, 154, 81, 1),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)),
-                                      onPressed: () {
-                                        buscar();
-                                      }))
-                              : Container()
-                        ])),
-                  )
-                ])),
-      ],
+                                      ],
+                                    ))
+                                : Container(),
+                            !_destFocus
+                                ? SizedBox(
+                                    height: 48.0,
+                                  )
+                                : Container(),
+                            !_orFocus
+                                ? textbox(
+                                    destinationController,
+                                    "Lugar de destino",
+                                    false,
+                                    'destination',
+                                    _focusDestination)
+                                : Container(),
+                            SizedBox(
+                              height: 30.0,
+                            ),
+                            (!_orFocus && !_destFocus)
+                                ? Container(
+                                    padding: const EdgeInsets.only(left: 180.0),
+                                    height: 50,
+                                    child: MaterialButton(
+                                        child: Text("Buscar",
+                                            style: new TextStyle(
+                                              fontSize: 20.0,
+                                            )),
+                                        color: Color.fromRGBO(255, 154, 81, 1),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        onPressed: () {
+                                          buscar();
+                                        }))
+                                : Container()
+                          ])),
+                    )
+                  ])),
+        ],
+      ),
     );
   }
 }
