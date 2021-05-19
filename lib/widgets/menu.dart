@@ -112,22 +112,6 @@ class _MenuState extends State<Menu> {
                 height: 0,
                 thickness: 1,
               ),
-              Container(
-                color: Color.fromRGBO(255, 174, 116, 1),
-                child: ListTile(
-                  leading: Icon(Icons.history),
-                  title: Text('Historial',
-                      style: TextStyle(
-                        fontSize: 18,
-                      )),
-                  onTap: () {},
-                ),
-              ),
-              Divider(
-                color: Colors.black,
-                height: 0,
-                thickness: 1,
-              ),
             ]),
             Expanded(
               flex: 1,

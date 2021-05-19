@@ -34,6 +34,7 @@ Future<Widget> createHomeScreen() async {
     },
   );
 }
+// flutter drive --driver test/integration_test/driver.dart --target test/integration_test/app_test.dart
 
 void main() {
   group('Integration test', () {
@@ -49,21 +50,26 @@ void main() {
       final destination = find.byKey(Key('destination'));
       await tester.pumpWidget(w);
 
+      expect(origin, findsOneWidget);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
       await tester.tap(origin);
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
       await tester.enterText(origin, 'cl 64 # 44');
-      await tester.pumpAndSettle(Duration(seconds: 2));
+      await tester.pumpAndSettle(Duration(seconds: 5));
 
-      await tester.tap(find.byKey(Key('HomeG')));
-      await tester.pumpAndSettle(Duration(seconds: 3));
+      // await tester.tap(find.byKey(Key('HomeG')));
+      // await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(destination);
-      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.enterText(destination, 'cl 82 # 44');
-
       await tester.pumpAndSettle(Duration(seconds: 2));
+
+      // await tester.tap(find.byKey(Key('HomeG')));
+      // await tester.pumpAndSettle(Duration(seconds: 3));
 
       await tester.tap(find.widgetWithText(MaterialButton, "Buscar"));
       await tester.pumpAndSettle(Duration(seconds: 5));
@@ -145,7 +151,10 @@ void main() {
       await tester.pump(Duration(seconds: 4));
       expect('/() => RDetails', Get.currentRoute);
 
-      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
+      expect(
+          tester.widget(find.byType(GoogleMap)),
+          isA<GoogleMap>()
+              .having((g) => g.markers.length, 'markers lenght', 5));
     });
 
     testWidgets('Try to log in with correct credentials',
@@ -739,7 +748,10 @@ void main() {
 
       expect('/() => RDetails', Get.currentRoute);
 
-      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
+      expect(
+          tester.widget(find.byType(GoogleMap)),
+          isA<GoogleMap>()
+              .having((g) => g.markers.length, 'markers lenght', 5));
     });
 
     testWidgets('Try to add a favorite route', (WidgetTester tester) async {
@@ -790,8 +802,7 @@ void main() {
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(
-          destination, 'Le Champ');
+      await tester.enterText(destination, 'Le Champ');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -809,7 +820,10 @@ void main() {
 
       expect('/() => RDetails', Get.currentRoute);
 
-      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
+      expect(
+          tester.widget(find.byType(GoogleMap)),
+          isA<GoogleMap>()
+              .having((g) => g.markers.length, 'markers lenght', 5));
 
       expect(
           find.widgetWithIcon(IconButton, Icons.star_border), findsOneWidget);
@@ -867,8 +881,7 @@ void main() {
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(
-          destination, 'Le Champ');
+      await tester.enterText(destination, 'Le Champ');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -886,7 +899,10 @@ void main() {
 
       expect('/() => RDetails', Get.currentRoute);
 
-      expect(tester.widget(find.byType(GoogleMap)), isA<GoogleMap>().having((g) => g.markers.length, 'markers lenght', 5));
+      expect(
+          tester.widget(find.byType(GoogleMap)),
+          isA<GoogleMap>()
+              .having((g) => g.markers.length, 'markers lenght', 5));
 
       expect(find.widgetWithIcon(IconButton, Icons.star), findsOneWidget);
       await tester.tap(find.widgetWithIcon(IconButton, Icons.star));
