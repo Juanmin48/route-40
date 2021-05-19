@@ -79,24 +79,19 @@ class FRoutes extends StatelessWidget {
                             SizedBox(
                               height: 15.0,
                             ),
-                              Expanded(
-                                  child: ListView(
-                                      children: List.generate(
-                                          dc.resultquery["fav"].length,
-                                          (index) => route(
-                                              "Ruta N°" +
-                                                  (index + 1).toString(),
-                                              dc.resultquery["fav"][index]
-                                                  ['nameE'],
-                                              dc.resultquery["fav"][index]
-                                                  ['nameR'],
-                                              "Origen: ${dc.resultquery["fav"][index]['pointInit']}",
-                                              "Destino: ${dc.resultquery["fav"][index]['pointFinal']}",
-                                              dc.resultquery["fav"][index]
-                                                  ['time'],
-                                              dc.resultquery["fav"][
-                                                  index]))) //         widget.user))),
-                                  ),
+                            Expanded(
+                                child: ListView(
+                                    children: List.generate(
+                                        dc.resultquery["fav"].length,
+                                        (index) => route(
+                                            "Ruta N°" + (index + 1).toString(),
+                                            dc.resultquery["fav"][index]
+                                                ['nameE'],
+                                            dc.resultquery["fav"][index]
+                                                ['nameR'],
+                                            dc.resultquery["fav"][
+                                                index]))) //         widget.user))),
+                                ),
                             Center(
                               child: Container(
                                   padding: const EdgeInsets.only(

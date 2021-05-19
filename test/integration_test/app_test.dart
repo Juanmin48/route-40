@@ -51,14 +51,13 @@ void main() {
       await tester.tap(origin);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(origin, '11.006058664612853,-74.82924466825544');
+      await tester.enterText(origin, 'cl 64 # 44');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(
-          destination, '10.992846496729307,-74.81869306099304');
+      await tester.enterText(destination, 'cl 82 # 44');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -80,14 +79,13 @@ void main() {
       await tester.tap(origin);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(origin, '10.99575811271032,-74.7947410740485');
+      await tester.enterText(origin, 'Cl. 29 #23');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(
-          destination, '10.991755078430286,-74.78927383901387');
+      await tester.enterText(destination, 'Cra. 22 #47');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -120,14 +118,13 @@ void main() {
       await tester.tap(origin);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(origin, '11.006058664612853,-74.82924466825544');
+      await tester.enterText(origin, 'cl 64 # 44');
       await tester.pumpAndSettle(Duration(seconds: 2));
 
       await tester.tap(destination);
       await tester.pumpAndSettle(Duration(seconds: 1));
 
-      await tester.enterText(
-          destination, '10.992846496729307,-74.81869306099304');
+      await tester.enterText(destination, 'cl 82 # 44');
 
       await tester.pumpAndSettle(Duration(seconds: 2));
 

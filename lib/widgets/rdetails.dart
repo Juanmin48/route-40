@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:route_40/widgets/favbutton.dart';
 
-Widget rdetails(name, company, origin, destination, time, route, user, fav) {
+Widget rdetails(name, company, origen, destino, time, route, user, fav) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,11 +50,12 @@ Widget rdetails(name, company, origin, destination, time, route, user, fav) {
         SizedBox(
           height: 8.0,
         ),
-        Text(origin, style: new TextStyle(color: Colors.white, fontSize: 19.0)),
+        Text("Origen: " + origen,
+            style: new TextStyle(color: Colors.white, fontSize: 19.0)),
         SizedBox(
           height: 15.0,
         ),
-        Text(destination,
+        Text("Destino: " + destino,
             style: new TextStyle(color: Colors.white, fontSize: 19.0)),
         SizedBox(
           height: 15.0,

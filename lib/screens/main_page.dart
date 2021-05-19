@@ -41,9 +41,6 @@ class _HomepageState extends State<Homepage> {
     dc.setCustomIcon();
     location = new Location();
 
-    originController.text = 'Cra. 46 #84-78';
-    destinationController.text = 'Cl. 90 # 46-112';
-
     location.onLocationChanged.listen((LocationData cLoc) {
       currentLocation = cLoc;
     });
@@ -64,11 +61,13 @@ class _HomepageState extends State<Homepage> {
     _focusOrigin.addListener(() {
       setState(() {
         _orFocus = true;
+        _destFocus = false;
       });
     });
     _focusDestination.addListener(() {
       setState(() {
         _destFocus = true;
+        _orFocus = false;
       });
     });
   }
@@ -77,9 +76,16 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     void startRoute() {
       for (var route in dc.routes) {
-        String param =
-            '/api/busLocation/' + route['nameE'] + ';' + route['nameR'];
+        String param = '/api/busLocation/' +
+            route['nameE'] +
+            ';' +
+            route['nameR'] +
+            ';' +
+            route['pointInit']['_latitude'].toString() +
+            ':' +
+            route['pointInit']['_longitude'].toString();
         http.get(Uri.https('route40-server.herokuapp.com', param));
+        // print(route['pointInit']);
       }
     }
 
@@ -89,14 +95,13 @@ class _HomepageState extends State<Homepage> {
             .locationFromAddress("${originController.text}, Barranquilla");
         List<geocoding.Location> destination = await geocoding
             .locationFromAddress("${destinationController.text}, Barranquilla");
-        print(origin);
         String coordsOr = origin[0].latitude.toString() +
             ',' +
             origin[0].longitude.toString();
         String coordsDes = destination[0].latitude.toString() +
             ',' +
             destination[0].longitude.toString();
-        String param = 'api/find/' + coordsOr + ';' + coordsDes;
+        String param = '/api/find/' + coordsOr + ';' + coordsDes;
         var response =
             await http.get(Uri.https('route40-server.herokuapp.com', param));
         if (response.statusCode == 200) {
@@ -152,7 +157,7 @@ class _HomepageState extends State<Homepage> {
                   _visiblebuttons
                       ? Container(
                           padding:
-                              EdgeInsets.only(right: 297, top: 5, bottom: 415),
+                              EdgeInsets.only(right: 297, top: 5, bottom: 355),
                           alignment: Alignment.center,
                           child: MaterialButton(
                             child: Padding(
@@ -181,9 +186,6 @@ class _HomepageState extends State<Homepage> {
                         padding: const EdgeInsets.all(20.0),
                         alignment: Alignment.centerLeft,
                         child: ListView(children: [
-                          SizedBox(
-                            height: 15.0,
-                          ),
                           !_destFocus
                               ? textbox(originController, "Lugar de origen",
                                   false, 'origin', _focusOrigin)
